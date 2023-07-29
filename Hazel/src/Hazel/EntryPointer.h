@@ -1,5 +1,4 @@
 #pragma once
-#include "Application.h"
 
 extern Hazel::Application* Hazel::CreateApplication();
 
@@ -7,6 +6,11 @@ extern Hazel::Application* Hazel::CreateApplication();
 
 int main(int* argc,char** argv)
 {
+	// Test the Log system
+	Hazel::Log::Init();
+	HAZEL_CORE_WARN("initial the Hazel Engine;");
+	HAZEL_CLIENT_INFO("Initial the App!");
+
 	auto app = Hazel::CreateApplication();
 	app->Run();
 	delete app;
