@@ -12,3 +12,5 @@
 #error Hazel only support Windows!
 
 #endif // 
+
+#define BIT(x) (1 << x)

@@ -31,7 +31,7 @@ project "Hazel"
 	filter "system:windows"
 		cppdialect "c++17"
 		staticruntime "On"
-		systemversion "10.0 (latest installed version)"
+		systemversion "latest"
 
 		define
 		{
@@ -77,7 +77,7 @@ project "Sandbox"
 		"Hazel/src"
 	}
 
-	links
+	links												-- Links of multi project 
 	{
 		"Hazel"
 	}
@@ -85,7 +85,7 @@ project "Sandbox"
 	filter "system:windows"
 		cppdialect "C++17"
 		staticruntime "On"
-		systemversion "10.0 (latest installed version)"
+		systemversion "latest"
 
 		define
 		{
