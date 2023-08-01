@@ -8,11 +8,11 @@ namespace Hazel
 	class HAZEL_API MouseEvent:public Event
 	{
 	public:
-		MouseEvent(int x, int y):m_MouseX(x),m_MouseY(y) {}
-
 		inline int GetMouseX() { return m_MouseX; }
 		inline int GetMouseY() { return m_MouseY; }
 	protected:
+		MouseEvent(int x, int y) :m_MouseX(x), m_MouseY(y) {}
+
 		int m_MouseX, m_MouseY;
 	};
 
