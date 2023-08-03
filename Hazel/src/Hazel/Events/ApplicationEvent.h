@@ -1,67 +1,99 @@
 #pragma once
 
-#include "Hazel/Events/Event.h"
+
+// 		WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,
+// 		AppTick, AppUpdate, AppRender,
+
+#include "Event.h"
 
 namespace Hazel
 {
-
-	class HAZEL_API WindowResizeEvent :public Event
+	class HAZEL_API WindowResizeEvent : public Event
 	{
 	public:
-		WindowResizeEvent(unsigned int width, unsigned int height) :m_Width(width),m_Height(height){}
-
-		unsigned int GetWidth() const { return m_Width; }
-		unsigned int GetHeight() const { return m_Height; }
+		WindowResizeEvent(unsigned width, unsigned height):m_width(width),m_height(height){}
 
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "WindowResizeEvent: " << m_Width << "," << m_Height << std::endl;
+			ss << "WindowResizeEvent: Width: " << m_width << ", Height: " << m_height;
 			return ss.str();
-		};
+		}
 
-		EVENT_CLASS_TYPE(WindowResize)
-		EVENT_CLASS_CATEGORY(EventCategoryApplication)
+		inline unsigned GetWidth() { return m_width; }
+		inline unsigned GetHeight() { return m_height; }
+
+		EVENT_TYPE(WindowResize)
+		EVENT_CATEGORY(EventCategoryApplication)
+
+
 
 	private:
-		unsigned int m_Width, m_Height;
+		unsigned int m_width, m_height;
 	};
 
-	class WindowCloseEvent : public Event
+	class HAZEL_API WindowCloseEvent:public Event
 	{
 	public:
-		WindowCloseEvent() = default;
+		WindowCloseEvent(){}
 
-		EVENT_CLASS_TYPE(WindowClose)
-		EVENT_CLASS_CATEGORY(EventCategoryApplication)
+		EVENT_TYPE(WindowClose)
+		EVENT_CATEGORY(EventCategoryApplication)
+
 	};
 
-	class AppTickEvent : public Event
+	class HAZEL_API WindowFocusEvent :public Event
+	{
+	public:
+		WindowFocusEvent(){}
+
+		EVENT_TYPE(WindowFocus)
+		EVENT_CATEGORY(EventCategoryApplication)
+	};
+
+	class HAZEL_API WindowLostFocusEvent :public Event
 	{
 	public :
+		WindowLostFocusEvent() = default;
+
+		EVENT_TYPE(WindowLostFocus)
+		EVENT_CATEGORY(EventCategoryApplication)
+	};
+
+	class HAZEL_API WindowMoveEvent :public Event
+	{
+	public:
+		WindowMoveEvent() = default;
+
+		EVENT_TYPE(WindowMoved)
+		EVENT_CATEGORY(EventCategoryApplication)
+	};
+
+	class HAZEL_API AppTickEvent :public Event
+	{
+	public:
 		AppTickEvent() = default;
 
-		EVENT_CLASS_CATEGORY(EventCategoryApplication)
-		EVENT_CLASS_TYPE(AppTick)
+		EVENT_TYPE(AppTick)
+		EVENT_CATEGORY(EventCategoryApplication)
 	};
 
-	class AppUpdataEvent :public Event
+	class HAZEL_API AppUpdateEvent :public Event
 	{
-	public :
-		AppUpdataEvent() = default;
-		EVENT_CLASS_TYPE(AppUpdate)
-		EVENT_CLASS_CATEGORY(EventCategoryApplication)
+	public:
+		AppUpdateEvent() = default;
+
+		EVENT_TYPE(AppUpdate)
+		EVENT_CATEGORY(EventCategoryApplication)
+
 	};
 
-	class AppRenderEvent :public Event
+	class HAZEL_API AppRenderEvent : public Event
 	{
 	public:
 		AppRenderEvent() = default;
 
-		EVENT_CLASS_CATEGORY(EventCategoryApplication)
-		EVENT_CLASS_TYPE(AppRender)
+		EVENT_TYPE(AppRender)
+		EVENT_CATEGORY(EventCategoryApplication)
 	};
-
-
-
 }

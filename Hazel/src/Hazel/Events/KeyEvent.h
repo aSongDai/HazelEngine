@@ -1,56 +1,71 @@
 #pragma once
 
-#include "Hazel/Events/Event.h"
+
+
+#include "Event.h"
 
 namespace Hazel
 {
-	class HAZEL_API KeyEvent : public Event
+	class HAZEL_API KeyEvent:public Event
 	{
 	public:
-		inline int GetKeyCode() const { return m_KeyCode; }
+		inline unsigned int GetKeyCode() { return m_keyCode; }
 
-		EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
+		EVENT_CATEGORY(EventCategoryKeyBoard)
 
-	protected:									// 这里设置成受保护的构造，原因是这个类不能被出了它的子类之外的任何对象所构造出来，
-												// 只有当键盘输入发生时，才能被子类调用，进行该类的创建，所以这个类只有一个code对应键位一个成员变量
-		KeyEvent(int keyCode):
-			m_KeyCode(keyCode){}
+	protected:
+		KeyEvent(unsigned int  keycode):m_keyCode(keycode){}
 
-		int m_KeyCode;
+		unsigned m_keyCode;
 	};
 
-	class HAZEL_API KeyPressedEvent : public KeyEvent
+	class HAZEL_API KeyPressEvent :public KeyEvent
 	{
 	public:
-		KeyPressedEvent(int keycode, int repeatCount):
-			KeyEvent(keycode), m_RepeatCount(repeatCount){}
+		KeyPressEvent(unsigned keycode, unsigned repeat):KeyEvent(keycode), m_repeatCount(repeat){}
 
-		inline int GetRepeatCount() const { return m_RepeatCount; }
-
-		std::string ToString() const override
+		std::string ToString() const override 
 		{
 			std::stringstream ss;
-			ss << "KeyPressedEvent: " << m_KeyCode << "(" << m_RepeatCount << " repeats)";
+			ss << "KeyPressEvent: " << m_keyCode << ", count:	" << m_repeatCount;
 			return ss.str();
 		}
-		EVENT_CLASS_TYPE(KeyPressed);
+
+		EVENT_TYPE(KeyPress)
 	private:
-		int m_RepeatCount;
+		unsigned m_repeatCount;
 	};
 
-	class HAZEL_API KeyReleasedEvent :public KeyEvent
+	class HAZEL_API KeyReleaseEvent :public KeyEvent
 	{
 	public:
-		KeyReleasedEvent(int keycode):KeyEvent(keycode){}
+
+		KeyReleaseEvent(unsigned keycode):KeyEvent(keycode){}
+		
+		std::string ToString() const override
+		{
+			std::stringstream ss;
+			ss << "KeyReleaseEvent: " << m_keyCode;
+			return ss.str();
+		}
+
+		EVENT_TYPE(KeyRelease)
+
+	};
+
+	class HAZEL_API KeyTypeEvent : public KeyEvent
+	{
+	public:
+		EVENT_TYPE(KeyType)
+
+		KeyTypeEvent(unsigned keycode ):KeyEvent(keycode){}
 
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "KeyReleasedEvent: " << m_KeyCode;
-			ss.str();
+			ss << "KeyTypeEvent: " << m_keyCode;
+			return ss.str();
 		}
-
-		EVENT_CLASS_TYPE(KeyReleased)
-
 	};
+		
 }
