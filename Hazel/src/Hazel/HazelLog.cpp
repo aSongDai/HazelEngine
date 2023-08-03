@@ -1,3 +1,4 @@
+#include "Hazelpch.h"
 #include "HazelLog.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 
