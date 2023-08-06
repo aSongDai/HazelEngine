@@ -2,6 +2,9 @@
 
 #include "Hazel/Core.h"
 
+#include <sstream>
+#include <string>
+
 namespace Hazel
 {
 	enum class EventType
@@ -38,7 +41,7 @@ namespace Hazel
 	class HAZEL_API Event
 	{
 		friend class EventDispatcher;
-		friend std::ostream& operator<<(std::ostream&, const Event&);
+		friend static std::ostream& operator<<(std::ostream&, const Event&);
 	public:
 		virtual ~Event() = default;
 
@@ -80,7 +83,7 @@ namespace Hazel
 		Event& m_Event;
 	};
 
-	std::ostream& operator<<(std::ostream& os,const Event& e)
+	static std::ostream& operator<<(std::ostream& os, const Event& e)
 	{
 		return os << e.ToString();
 	}

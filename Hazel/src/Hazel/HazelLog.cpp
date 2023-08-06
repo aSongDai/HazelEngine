@@ -1,6 +1,7 @@
-#include "Hazelpch.h"
-#include "HazelLog.h"
+//#include "Hazelpch.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
+
+#include "HazelLog.h"
 
 namespace Hazel
 {

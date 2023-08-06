@@ -31,6 +31,8 @@ namespace Hazel
 #define HAZEL_CORE_WARN(...)		::Hazel::Log::GetCoreLogger()->warn(__VA_ARGS__)
 #define HAZEL_CORE_ERROR(...)		::Hazel::Log::GetCoreLogger()->error(__VA_ARGS__)
 //#define HAZEL_CORE_FATAL(...)		::Hazel::Log::GetCoreLogger()->fatal(__VA_ARGS__)
+//#define HAZEL_CORE_ASSERT(x, s)		static_assert((x), ::Hazel::Log::GetCoreLogger()->error(s)
+
 
 // Client Log macros
 #define HAZEL_CLIENT_TRACE(...)		::Hazel::Log::GetClientLogger()->trace(__VA_ARGS__)
@@ -38,5 +40,7 @@ namespace Hazel
 #define HAZEL_CLIENT_WARN(...)		::Hazel::Log::GetClientLogger()->warn(__VA_ARGS__)
 #define HAZEL_CLIENT_ERROR(...)		::Hazel::Log::GetClientLogger()->error(__VA_ARGS__)
 //#define HAZEL_CLIENT_FATAL(...)		::Hazel::Log::GetClientLogger()->fatal(__VA_ARGS__)
+
+
 
 #pragma warning(pop)
