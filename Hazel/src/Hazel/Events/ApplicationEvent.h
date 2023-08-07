@@ -11,7 +11,7 @@ namespace Hazel
 	class HAZEL_API WindowResizeEvent : public Event
 	{
 	public:
-		WindowResizeEvent(unsigned width, unsigned height):m_width(width),m_height(height){}
+		WindowResizeEvent(int width,int height):m_width(width),m_height(height){}
 
 		std::string ToString() const override
 		{
@@ -29,7 +29,7 @@ namespace Hazel
 
 
 	private:
-		unsigned int m_width, m_height;
+		int m_width, m_height;
 	};
 
 	class HAZEL_API WindowCloseEvent:public Event

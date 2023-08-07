@@ -3,7 +3,6 @@
 #include "Events/Event.h"
 #include "Core.h"
 
-
 #include <string>
 #include <functional>
 

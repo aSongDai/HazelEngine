@@ -2,6 +2,7 @@
 
 #include "Hazel/Core.h"
 
+#include <functional>
 #include <sstream>
 #include <string>
 
@@ -62,7 +63,7 @@ namespace Hazel
 	class HAZEL_API EventDispatcher
 	{
 		template<typename T>
-		using EventFunction = std::is_function<bool(T&)>;
+		using EventFunction = std::function<bool(T&)>;
 	public:
 		EventDispatcher(Event& event) :m_Event(event) {}
 
