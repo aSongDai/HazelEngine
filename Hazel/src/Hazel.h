@@ -5,7 +5,7 @@
 
 #include "Hazel/Application.h"
 #include "Hazel/HazelLog.h"
-
+#include "Hazel/Layer.h"
 
 
 // ----------Entry Pointer----------

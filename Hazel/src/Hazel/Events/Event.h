@@ -55,6 +55,8 @@ namespace Hazel
 		{
 			return GetCategoryFlags() & category;
 		}
+
+		inline bool GetHandled() const { return m_Handled; }
 	protected:
 		bool m_Handled = false;								// 判断该事件是否被处理，如果没有需要转发，如果处理过了就跳过
 

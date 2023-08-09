@@ -3,6 +3,7 @@
 #include "Core.h"
 #include "Window.h"
 #include "Events/ApplicationEvent.h"
+#include "LayerStack.h"
 
 namespace Hazel
 {
@@ -17,6 +18,9 @@ namespace Hazel
 
 		void Run();
 
+		void PushLayer(Layer* layer);
+		void PushOverlay(Layer* overlay);
+
 		// 事件	-> 主要是dispatcher
 		void OnEvent(Event& e);
 	private:
@@ -24,6 +28,7 @@ namespace Hazel
 
 		std::unique_ptr<Window> m_Window;
 		bool m_Running = true;
+		LayerStack m_LayerStack;
 	};
 
 	Application* CreateApplication();
