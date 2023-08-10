@@ -3,14 +3,14 @@
 #include "Application.h"
 #include "HazelLog.h"
 
-
 #include <glad/glad.h>
 
-// Bind the callback function macro.
-
+Hazel::Application* Hazel::Application::m_Instance = nullptr;
 
 Hazel::Application::Application()
 {
+	HAZEL_CORE_ASSERT(!m_Instance, "Application already exists!");
+	m_Instance = this;
 	m_Window =std::unique_ptr<Window>(Window::Create());
 	m_Window->SetEventCallback(BIND_EVENT_FUNCTION(OnEvent));
 }
@@ -61,9 +61,11 @@ bool Hazel::Application::OnWindowClose(Hazel::WindowCloseEvent& event)
 void Hazel::Application::PushLayer(Layer* layer)
 {
 	m_LayerStack.PushLayer(layer);
+	layer->OnAttach();
 }
 
 void Hazel::Application::PushOverlay(Layer* overlay)
 {
 	m_LayerStack.PushOverlay(overlay);
+	overlay->OnAttach();
 }

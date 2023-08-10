@@ -23,12 +23,18 @@ namespace Hazel
 
 		// 事件	-> 主要是dispatcher
 		void OnEvent(Event& e);
+		
+		inline static Application& Get() { return *m_Instance; }
+		inline Window& GetWindow() { return *m_Window; }
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 
 		std::unique_ptr<Window> m_Window;
 		bool m_Running = true;
 		LayerStack m_LayerStack;
+
+	private :
+		static Application* m_Instance;
 	};
 
 	Application* CreateApplication();
