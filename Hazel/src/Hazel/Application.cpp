@@ -2,7 +2,9 @@
 //#include "Events/ApplicationEvent.h"
 #include "Application.h"
 #include "HazelLog.h"
-#include "GLFW/glfw3.h"
+
+
+#include <glad/glad.h>
 
 // Bind the callback function macro.
 
