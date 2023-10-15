@@ -23,3 +23,6 @@
 
 
 #define BIT(x) (1 << x)
+
+// bind the callback function
+#define HAZEL_BIND_EVENT_FUNCTION(function) std::bind(&function, this, std::placeholders::_1)

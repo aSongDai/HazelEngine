@@ -39,15 +39,15 @@ void Hazel::Application::Run()
 {
 	while (m_Running)
 	{
-		glClearColor(1, 0, 1, 1);
 		glClear(GL_COLOR_BUFFER_BIT);
+		glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
 
 		for (auto layer : m_LayerStack)
 		{
 			layer->OnUpdate();
 		}
-
 		m_Window->OnUpdate();
+
 	}
 }
 
