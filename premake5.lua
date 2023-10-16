@@ -1,4 +1,6 @@
 workspace "HazelEngine"
+	startproject "Sandbox"
+
 	configurations {
 		"Debug", 
 		"Release",
@@ -20,6 +22,8 @@ IncludeDir["ImGui"] = "Hazel/vendor/imgui"
 include "Hazel/vendor/GLFW"
 include "Hazel/vendor/Glad"
 include "Hazel/vendor/imgui"
+
+
 
 
 project "Hazel"

@@ -1,6 +1,8 @@
 
 #include "Hazel.h"
 
+
+
 class ExampleLayer :public Hazel::Layer
 {
 public:
@@ -11,12 +13,20 @@ public:
 	
 	void OnUpdate() override
 	{
-		HAZEL_CLIENT_INFO("ExampleLayer::Update");
+		//HAZEL_CLIENT_INFO("ExampleLayer::Update");
+
+		if (Hazel::Input::IsKeyPressed(HAZEL_KEY_TAB))
+			HAZEL_CLIENT_INFO("Key Table has been pressed!");
 	}
 
 	void OnEvent(Hazel::Event& event) override
 	{
-		HAZEL_CLIENT_TRACE("{0}", event);
+		//HAZEL_CLIENT_TRACE("{0}", event);
+		if (event.GetEventType() == Hazel::EventType::KeyPress)
+		{
+			Hazel::KeyPressEvent& e = (Hazel::KeyPressEvent&)event;
+			HAZEL_CLIENT_TRACE("{0}", (char)e.GetKeyCode());					// 观察这里keycode，强制类型转换之后是溢出的， 所以会出现Control等案件代码与字母重复的情况
+		}
 	}
 };
 

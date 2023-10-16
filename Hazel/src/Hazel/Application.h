@@ -4,6 +4,7 @@
 #include "Window.h"
 #include "Events/ApplicationEvent.h"
 #include "LayerStack.h"
+#include "Input.h"
 
 namespace Hazel
 {
