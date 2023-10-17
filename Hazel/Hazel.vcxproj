@@ -79,7 +79,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>HAZEL_BUILD_DLL;HAZEL_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;HAZEL_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -104,7 +104,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>HAZEL_BUILD_DLL;HAZEL_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;HAZEL_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -132,7 +132,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>HAZEL_BUILD_DLL;HAZEL_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;HAZEL_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -174,8 +174,32 @@
     <ClInclude Include="src\Hazel\Window.h" />
     <ClInclude Include="src\Hazelpch.h" />
     <ClInclude Include="src\Platform\OpenGL\ImGuiOpenGLRenderer.h" />
+    <ClInclude Include="src\Platform\OpenGL\imgui_impl_glfw.h" />
     <ClInclude Include="src\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
+    <ClInclude Include="vendor\glm\glm\common.hpp" />
+    <ClInclude Include="vendor\glm\glm\exponential.hpp" />
+    <ClInclude Include="vendor\glm\glm\ext.hpp" />
+    <ClInclude Include="vendor\glm\glm\fwd.hpp" />
+    <ClInclude Include="vendor\glm\glm\geometric.hpp" />
+    <ClInclude Include="vendor\glm\glm\glm.hpp" />
+    <ClInclude Include="vendor\glm\glm\integer.hpp" />
+    <ClInclude Include="vendor\glm\glm\mat2x2.hpp" />
+    <ClInclude Include="vendor\glm\glm\mat2x3.hpp" />
+    <ClInclude Include="vendor\glm\glm\mat2x4.hpp" />
+    <ClInclude Include="vendor\glm\glm\mat3x2.hpp" />
+    <ClInclude Include="vendor\glm\glm\mat3x3.hpp" />
+    <ClInclude Include="vendor\glm\glm\mat3x4.hpp" />
+    <ClInclude Include="vendor\glm\glm\mat4x2.hpp" />
+    <ClInclude Include="vendor\glm\glm\mat4x3.hpp" />
+    <ClInclude Include="vendor\glm\glm\mat4x4.hpp" />
+    <ClInclude Include="vendor\glm\glm\matrix.hpp" />
+    <ClInclude Include="vendor\glm\glm\packing.hpp" />
+    <ClInclude Include="vendor\glm\glm\trigonometric.hpp" />
+    <ClInclude Include="vendor\glm\glm\vec2.hpp" />
+    <ClInclude Include="vendor\glm\glm\vec3.hpp" />
+    <ClInclude Include="vendor\glm\glm\vec4.hpp" />
+    <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Application.cpp" />
@@ -184,6 +208,7 @@
     <ClCompile Include="src\Hazel\Layer.cpp" />
     <ClCompile Include="src\Hazel\LayerStack.cpp" />
     <ClCompile Include="src\Platform\OpenGL\ImGuiOpenGLRenderer.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\imgui_impl_glfw.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
   </ItemGroup>

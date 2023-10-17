@@ -15,15 +15,14 @@ workspace "HazelEngine"
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 IncludeDir = {}
-IncludeDir["GLFW"] = "Hazel/vendor/GLFW/include"
-IncludeDir["Glad"] = "Hazel/vendor/Glad/include"
-IncludeDir["ImGui"] = "Hazel/vendor/imgui"
+IncludeDir["GLFW"]	=	"Hazel/vendor/GLFW/include"
+IncludeDir["Glad"]	=	"Hazel/vendor/Glad/include"
+IncludeDir["ImGui"] =	"Hazel/vendor/imgui"
+IncludeDir["glm"]	=	"Hazel/vendor/glm"
 
 include "Hazel/vendor/GLFW"
 include "Hazel/vendor/Glad"
 include "Hazel/vendor/imgui"
-
-
 
 
 project "Hazel"
@@ -43,7 +42,9 @@ project "Hazel"
 	{
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
-		"%{prj.name}/src/**.hpp"
+		"%{prj.name}/src/**.hpp",
+		"%{IncludeDir.glm}/glm/*.hpp",
+		"%{IncludeDir.glm}/glm/*.inl"
 	}
 	
 	includedirs
@@ -52,7 +53,9 @@ project "Hazel"
 		"%{prj.name}/vendor/spdlog/include",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
-		"%{IncludeDir.ImGui}"
+		"%{IncludeDir.ImGui}",
+		"%{IncludeDir.glm}",
+
 	}
 
 	links{
@@ -105,13 +108,16 @@ project "Sandbox"
 	files												-- source file
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{IncludeDir.glm}/glm/*.hpp",
+		"%{IncludeDir.glm}/glm/*.inl"
 	}
 
 	includedirs											-- include directory
 	{
 		"Hazel/vendor/spdlog/include",
-		"Hazel/src"
+		"Hazel/src",
+		"%{IncludeDir.glm}"
 	}
 
 	links												-- Links of multi project 
