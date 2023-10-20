@@ -28,9 +28,10 @@ include "Hazel/vendor/imgui"
 project "Hazel"
 	
 	location "Hazel"									-- Project path
-	kind "SharedLib"									-- 类型 输出dll
+	kind "StaticLib"									-- 类型 输出dll SharedLib  -->  切换成静态 StaticLib
 	language "C++"	
-	staticruntime "off"
+	cppdialect "C++17"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")	-- output directory
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")	-- intermedia directory: .obj file
@@ -65,9 +66,7 @@ project "Hazel"
 		"opengl32.lib"
 	}
 
-	filter "system:windows"
-		cppdialect "c++17"
-		staticruntime "On"
+	filter "system:windows"  
 		systemversion "latest"
 
 		defines
@@ -102,6 +101,7 @@ project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
+	cppdialect "C++17"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin/" .. outputdir .. "/%{prj.name}")
 
@@ -126,8 +126,7 @@ project "Sandbox"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
-		staticruntime "On"
+		staticruntime "on"
 		systemversion "latest"
 
 		defines

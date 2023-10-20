@@ -3,11 +3,15 @@
 
 #ifdef HAZEL_PLATFORM_WINDOWS
 
+#if HAZEL_DYNAMIC_LINK
 #ifdef HAZEL_BUILD_DLL
 	#define HAZEL_API __declspec(dllexport)
 #else
 	#define HAZEL_API __declspec(dllimport)
-#endif // HAZEL_BUILD_DLL
+#endif						// HAZEL_BUILD_DLL
+#else
+#define HAZEL_API
+#endif						// HAZEL_DYNAMIC_LINK
 
 #else
 	#error Hazel only support Windows!
@@ -25,7 +29,7 @@
 #else
 	#define HAZEL_CLIENT_ASSERT(x, ...)
 	#define HAZEL_CORE_ASSERT(x, ...)
-#endif // HAZEL_ENABLE_ASSERTS
+#endif						// HAZEL_ENABLE_ASSERTS
 
 
 #define BIT(x) (1 << x)

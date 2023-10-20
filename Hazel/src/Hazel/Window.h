@@ -2,6 +2,7 @@
 
 #include "Events/Event.h"
 #include "Core.h"
+#include "Hazel/Renderer/GraphicContext.h"
 
 #include <string>
 #include <functional>
@@ -44,6 +45,9 @@ namespace Hazel
 		virtual void* GetNativeWindow() const = 0;
 
 		static Window* Create(const WindowProps& props = WindowProps());
+
+	public:
+		GraphicContext* m_GraphicContext;
 
 	private:
 		unsigned int m_width, m_height;

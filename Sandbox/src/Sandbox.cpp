@@ -29,7 +29,7 @@ public:
 		auto cam = camera(5.0f, { 0.5f,0.5f });
 	}
 	
-	void OnUpdate() override
+	virtual void OnUpdate() override
 	{
 		//HAZEL_CLIENT_INFO("ExampleLayer::Update");
 
@@ -37,7 +37,12 @@ public:
 			HAZEL_CLIENT_INFO("Key Table has been pressed!");
 	}
 
-	void OnEvent(Hazel::Event& event) override
+	virtual void OnImGuiRender() override
+	{
+		
+	}
+
+	virtual void OnEvent(Hazel::Event& event) override
 	{
 		//HAZEL_CLIENT_TRACE("{0}", event);
 		if (event.GetEventType() == Hazel::EventType::KeyPress)
