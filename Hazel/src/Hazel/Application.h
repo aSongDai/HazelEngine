@@ -35,6 +35,12 @@ namespace Hazel
 		bool m_Running = true;
 		LayerStack m_LayerStack;
 
+		unsigned int m_VertexArray;
+		unsigned int m_VertexBuffer;
+		unsigned int m_IndexBuffer;
+
+		//unsigned int m_Shader;							// 着色器不提供的话，显卡驱动会默认提供一个
+
 	private :
 		static Application* m_Instance;
 	};

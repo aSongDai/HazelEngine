@@ -40,11 +40,11 @@ namespace Hazel
 
 		struct WindowData
 		{
-			std::string Title;
-			unsigned int Width, Height;
-			bool VSync;
+			std::string				Title;
+			unsigned int			Width, Height;
+			bool					VSync;
 
-			EventCallbackFunction EventCallback;
+			EventCallbackFunction	EventCallback;
 		};
 		WindowData m_Data;
 	};
