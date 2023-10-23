@@ -18,6 +18,7 @@ Hazel::Application::Application()
 	PushOverlay(m_ImGuiLayer);
 	
 
+
 	// VertexArray
 	glGenVertexArrays(1, &m_VertexArray);
 	glBindVertexArray(m_VertexArray);
@@ -30,6 +31,8 @@ Hazel::Application::Application()
 		 0.5f, -0.5f, 0.0f,
 		 0.0f,  0.5f, 0.0f
 	};
+
+	VertexBuffer* buffer = new VertexBuffer(&vertices, vertices);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	
 	glEnableVertexAttribArray(0);
@@ -42,7 +45,27 @@ Hazel::Application::Application()
 	unsigned int indices[3] = {0,1,2};
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
+	const std::string vertexShaderResource = R"(
+		#version 330 core
+		layout (location = 0) in vec3 a_Position;
+		out vec3 v_Position;
+		void main()
+		{
+			v_Position  = a_Position;
+			gl_Position = vec4(a_Position, 1.0);
+		}
+	)";
+	const std::string fragmentShaderResource = R"(
+		#version 330 core
+		layout (location = 0) out vec4 color;
+		in vec3 v_Position;
+		void main(){
+			color = vec4(v_Position + 0.5, 1.0);
+		}
+	)";
+
 	// Shader
+	m_Shader.reset(new Shader(vertexShaderResource, fragmentShaderResource));
 }
 
 void Hazel::Application::OnEvent(Event& e)
@@ -72,6 +95,7 @@ void Hazel::Application::Run()
 		glClear(GL_COLOR_BUFFER_BIT);
 		glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
 
+		m_Shader->Bind();
 		glBindVertexArray(m_VertexArray);
 		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
 

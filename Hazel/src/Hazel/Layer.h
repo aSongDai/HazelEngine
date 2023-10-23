@@ -1,11 +1,9 @@
 #pragma once
 
-#include<string>
-
-
 #include "Core.h"
 #include "Hazel/Events/Event.h"
 
+#include<string>
 
 namespace Hazel
 {

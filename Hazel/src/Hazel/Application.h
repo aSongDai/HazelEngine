@@ -6,6 +6,10 @@
 #include "LayerStack.h"
 #include "Input.h"
 #include "ImGui/ImGuiLayer.h"
+#include "Hazel/Renderer/Shader.h"
+
+#include <memory>
+
 
 namespace Hazel
 {
@@ -38,6 +42,7 @@ namespace Hazel
 		unsigned int m_VertexArray;
 		unsigned int m_VertexBuffer;
 		unsigned int m_IndexBuffer;
+		std::unique_ptr<Shader> m_Shader;
 
 		//unsigned int m_Shader;							// 着色器不提供的话，显卡驱动会默认提供一个
 
