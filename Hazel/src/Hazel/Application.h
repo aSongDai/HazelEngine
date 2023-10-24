@@ -7,6 +7,7 @@
 #include "Input.h"
 #include "ImGui/ImGuiLayer.h"
 #include "Hazel/Renderer/Shader.h"
+#include "Platform/OpenGL/OpenGLBuffer.h"
 
 #include <memory>
 
@@ -39,12 +40,13 @@ namespace Hazel
 		bool m_Running = true;
 		LayerStack m_LayerStack;
 
-		unsigned int m_VertexArray;
-		unsigned int m_VertexBuffer;
-		unsigned int m_IndexBuffer;
+		// Graphic
+		uint32_t m_VertexArray;
+		//unsigned int m_VertexBuffer;
+		//unsigned int m_IndexBuffer;
+		std::unique_ptr<VertexBuffer> m_VertexBuffer;
+		std::unique_ptr<IndexBuffer> m_IndexBuffer;
 		std::unique_ptr<Shader> m_Shader;
-
-		//unsigned int m_Shader;							// 着色器不提供的话，显卡驱动会默认提供一个
 
 	private :
 		static Application* m_Instance;
