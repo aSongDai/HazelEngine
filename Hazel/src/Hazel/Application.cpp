@@ -7,6 +7,27 @@
 
 Hazel::Application* Hazel::Application::m_Instance = nullptr;
 
+static GLenum BufferDataTypeToOpenGLBaseType(Hazel::BufferDataType Type)
+{
+	switch (Type)
+	{
+	case Hazel::BufferDataType::None:		return GL_NONE;
+	case Hazel::BufferDataType::Float:		return GL_FLOAT;
+	case Hazel::BufferDataType::Float2:		return GL_FLOAT;
+	case Hazel::BufferDataType::Float3:		return GL_FLOAT;
+	case Hazel::BufferDataType::Float4:		return GL_FLOAT;
+	case Hazel::BufferDataType::Mat3:		return GL_FLOAT;
+	case Hazel::BufferDataType::Mat4:		return GL_FLOAT;
+	case Hazel::BufferDataType::Int:		return GL_INT;
+	case Hazel::BufferDataType::Int2:		return GL_INT;
+	case Hazel::BufferDataType::Int3:		return GL_INT;
+	case Hazel::BufferDataType::Int4:		return GL_INT;
+	case Hazel::BufferDataType::Bool:		return GL_BOOL;
+	}
+	HAZEL_CORE_ASSERT(false & "Unknown DataType!");
+	return GL_NONE;
+}
+
 Hazel::Application::Application()
 {
 	HAZEL_CORE_ASSERT(!m_Instance, "Application already exists!");
@@ -22,9 +43,6 @@ Hazel::Application::Application()
 	// VertexArray
 	glCreateVertexArrays(1, &m_VertexArray);
 	glBindVertexArray(m_VertexArray);
-	// VertexBuffer
-	//glGenBuffers(1, &m_VertexBuffer);
-	//glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
 
 	float vertices[3 * 3] = {
 		-0.5f, -0.5f, 0.0f,
@@ -34,16 +52,28 @@ Hazel::Application::Application()
 
 	m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
 	
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
 
-	// IndexBuffer
-	//glGenBuffers(0, &m_IndexBuffer);
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer);
-	
+	{
+		BufferLayout layout = {
+			{"a_Position", BufferDataType::Float3}
+		};
+		m_VertexBuffer->SetBufferLayout(layout);
+	}
+	uint32_t index = 0;
+	// Set VertexBufferLayout
+	for (const auto& element : m_VertexBuffer->GetBufferLayout())
+	{
+		glEnableVertexAttribArray(index);
+		glVertexAttribPointer(index, 
+			element.GetComponentCount(), 
+			BufferDataTypeToOpenGLBaseType(element.Type), 
+			element.Normalization ? GL_TRUE:GL_FALSE, 
+			m_VertexBuffer->GetBufferLayout().GetStride(),
+			(const void*)element.Offset);
+		++index;
+	}
 
 	uint32_t indices[3] = {0,1,2};
-	/*glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);*/
 	m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices)/sizeof(uint32_t)));
 
 	const std::string vertexShaderResource = R"(
