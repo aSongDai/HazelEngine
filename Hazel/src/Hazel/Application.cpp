@@ -53,14 +53,46 @@ Hazel::Application::Application()
 	m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
 	
 
-	{
+	/*{
 		BufferLayout layout = {
 			{"a_Position", BufferDataType::Float3}
 		};
 		m_VertexBuffer->SetBufferLayout(layout);
+	}*/
+	// Set VertexBufferLayout	
+	// 布局需要的信息：
+	/*
+		1. Name
+		2. 数据类型	----> 从数据类型需要知道类型的长度
+		3. 给的数据需要包含几个点
+		4. 每个点中包含几个数据
+		5. 两个数据点中间的偏移		可以通过数据类型来计算，要考虑到一个缓冲区的所有数据类型（比如Position和Color）
+		6. 
+	*/
+	
+	{
+		BufferDataLayout layout = {
+			{"a_Position", BufferDataType::Float3}
+		};
+		m_VertexBuffer->SetBufferDataLayout(layout);
 	}
+
 	uint32_t index = 0;
-	// Set VertexBufferLayout
+	for (const auto& element : m_VertexBuffer->GetBufferDataLayout())
+	{
+		glEnableVertexAttribArray(index);
+		glVertexAttribPointer(index, 
+			element.GetComponentCount(),
+			BufferDataTypeToOpenGLBaseType(element.Type),
+			element.Normalized?GL_TRUE:GL_FALSE,
+			m_VertexBuffer->GetBufferDataLayout().GetStride(),
+			(const void*)element.Offset);
+		++index;
+	}
+
+
+
+	/*uint32_t index = 0;
 	for (const auto& element : m_VertexBuffer->GetBufferLayout())
 	{
 		glEnableVertexAttribArray(index);
@@ -71,7 +103,7 @@ Hazel::Application::Application()
 			m_VertexBuffer->GetBufferLayout().GetStride(),
 			(const void*)element.Offset);
 		++index;
-	}
+	}*/
 
 	uint32_t indices[3] = {0,1,2};
 	m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices)/sizeof(uint32_t)));

@@ -13,17 +13,17 @@ namespace Hazel
 		virtual void Bind() const override;
 		virtual void UnBind() const override;
 
-		virtual BufferLayout GetBufferLayout() const override
+		virtual BufferDataLayout GetBufferDataLayout() const override
 		{
-			return m_BufferLayout;
+			return m_Layout;
 		}
-		virtual void SetBufferLayout(const BufferLayout& layout) override
+		virtual void SetBufferDataLayout(const BufferDataLayout& layout) override
 		{
-			m_BufferLayout = layout;
+			m_Layout = layout;
 		}
 	private:
 		uint32_t m_RendererID;
-		BufferLayout m_BufferLayout;
+		BufferDataLayout m_Layout;
 	};
 
 
