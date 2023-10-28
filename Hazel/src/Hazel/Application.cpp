@@ -44,21 +44,15 @@ Hazel::Application::Application()
 	glCreateVertexArrays(1, &m_VertexArray);
 	glBindVertexArray(m_VertexArray);
 
-	float vertices[3 * 3] = {
-		-0.5f, -0.5f, 0.0f,
-		 0.5f, -0.5f, 0.0f,
-		 0.0f,  0.5f, 0.0f
+	float vertices[] = {
+		-0.5f, -0.5f, 0.0f,	1.0f, 0.0f, 0.0f, 1.0f,
+		 0.5f, -0.5f, 0.0f,	0.0f, 1.0f, 0.0f, 1.0f,
+		 0.0f,  0.5f, 0.0f,	0.0f, 0.0f, 0.0f, 1.0f
 	};
 
 	m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
 	
 
-	/*{
-		BufferLayout layout = {
-			{"a_Position", BufferDataType::Float3}
-		};
-		m_VertexBuffer->SetBufferLayout(layout);
-	}*/
 	// Set VertexBufferLayout	
 	// 布局需要的信息：
 	/*
@@ -67,12 +61,14 @@ Hazel::Application::Application()
 		3. 给的数据需要包含几个点
 		4. 每个点中包含几个数据
 		5. 两个数据点中间的偏移		可以通过数据类型来计算，要考虑到一个缓冲区的所有数据类型（比如Position和Color）
-		6. 
+		
+		重构数据进行测试， 加上颜色
 	*/
 	
 	{
 		BufferDataLayout layout = {
-			{"a_Position", BufferDataType::Float3}
+			{"a_Position", BufferDataType::Float3},
+			{"a_Color", BufferDataType::Float4}
 		};
 		m_VertexBuffer->SetBufferDataLayout(layout);
 	}
@@ -90,31 +86,19 @@ Hazel::Application::Application()
 		++index;
 	}
 
-
-
-	/*uint32_t index = 0;
-	for (const auto& element : m_VertexBuffer->GetBufferLayout())
-	{
-		glEnableVertexAttribArray(index);
-		glVertexAttribPointer(index, 
-			element.GetComponentCount(), 
-			BufferDataTypeToOpenGLBaseType(element.Type), 
-			element.Normalization ? GL_TRUE:GL_FALSE, 
-			m_VertexBuffer->GetBufferLayout().GetStride(),
-			(const void*)element.Offset);
-		++index;
-	}*/
-
 	uint32_t indices[3] = {0,1,2};
 	m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices)/sizeof(uint32_t)));
 
 	const std::string vertexShaderResource = R"(
 		#version 330 core
 		layout (location = 0) in vec3 a_Position;
+		layout (location = 1) in vec4 a_Color;
 		out vec3 v_Position;
+		out vec4 v_Color;
 		void main()
 		{
 			v_Position  = a_Position;
+			v_Color = a_Color;
 			gl_Position = vec4(a_Position, 1.0);
 		}
 	)";
@@ -122,8 +106,10 @@ Hazel::Application::Application()
 		#version 330 core
 		layout (location = 0) out vec4 color;
 		in vec3 v_Position;
+		in vec4 v_Color;
 		void main(){
 			color = vec4(v_Position + 0.5, 1.0);
+			color = v_Color;
 		}
 	)";
 
