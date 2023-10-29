@@ -7,7 +7,9 @@
 #include "Input.h"
 #include "ImGui/ImGuiLayer.h"
 #include "Hazel/Renderer/Shader.h"
-#include "Platform/OpenGL/OpenGLBuffer.h"
+#include "Hazel/Renderer/Buffer.h"
+#include "Hazel/Renderer/Buffer.h"
+#include "Hazel/Renderer/VertexArray.h"
 
 #include <memory>
 
@@ -41,12 +43,16 @@ namespace Hazel
 		LayerStack m_LayerStack;
 
 		// Graphic
-		uint32_t m_VertexArray;
+		//uint32_t m_VertexArray;
 		//unsigned int m_VertexBuffer;
 		//unsigned int m_IndexBuffer;
-		std::unique_ptr<VertexBuffer> m_VertexBuffer;
-		std::unique_ptr<IndexBuffer> m_IndexBuffer;
-		std::unique_ptr<Shader> m_Shader;
+		std::shared_ptr<VertexArray> m_VertexArray;
+		std::shared_ptr<VertexBuffer> m_VertexBuffer;
+		std::shared_ptr<IndexBuffer> m_IndexBuffer;
+		std::shared_ptr<Shader> m_Shader;
+
+		std::shared_ptr<VertexArray> m_SquareVertexArray;
+		std::shared_ptr<Shader> m_SquareShader;
 
 	private :
 		static Application* m_Instance;
