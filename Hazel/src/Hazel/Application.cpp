@@ -7,26 +7,6 @@
 
 Hazel::Application* Hazel::Application::m_Instance = nullptr;
 
-static GLenum BufferDataTypeToOpenGLBaseType(Hazel::BufferDataType Type)
-{
-	switch (Type)
-	{
-	case Hazel::BufferDataType::None:		return GL_NONE;
-	case Hazel::BufferDataType::Float:		return GL_FLOAT;
-	case Hazel::BufferDataType::Float2:		return GL_FLOAT;
-	case Hazel::BufferDataType::Float3:		return GL_FLOAT;
-	case Hazel::BufferDataType::Float4:		return GL_FLOAT;
-	case Hazel::BufferDataType::Mat3:		return GL_FLOAT;
-	case Hazel::BufferDataType::Mat4:		return GL_FLOAT;
-	case Hazel::BufferDataType::Int:		return GL_INT;
-	case Hazel::BufferDataType::Int2:		return GL_INT;
-	case Hazel::BufferDataType::Int3:		return GL_INT;
-	case Hazel::BufferDataType::Int4:		return GL_INT;
-	case Hazel::BufferDataType::Bool:		return GL_BOOL;
-	}
-	HAZEL_CORE_ASSERT(false & "Unknown DataType!");
-	return GL_NONE;
-}
 
 Hazel::Application::Application()
 {
@@ -40,9 +20,9 @@ Hazel::Application::Application()
 	
 
 
-	// VertexArray
-	glCreateVertexArrays(1, &m_VertexArray);
-	glBindVertexArray(m_VertexArray);
+	m_VertexArray.reset(VertexArray::Create());
+	m_VertexArray->Bind();
+
 
 	float vertices[] = {
 		-0.5f, -0.5f, 0.0f,	1.0f, 0.0f, 0.0f, 1.0f,
@@ -50,44 +30,22 @@ Hazel::Application::Application()
 		 0.0f,  0.5f, 0.0f,	0.0f, 0.0f, 0.0f, 1.0f
 	};
 
-	m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+	std::shared_ptr<VertexBuffer> vertexBuffer;
+	vertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
 	
+	BufferDataLayout layout = {
+		{"a_Position", BufferDataType::Float3},
+		{"a_Color", BufferDataType::Float4}
+	};
+	vertexBuffer->SetBufferDataLayout(layout);
+	HAZEL_CORE_ASSERT(m_VertexArray->AddVertexBuffer(vertexBuffer), "Some Error in function AddVertexBuffer!");
 
-	// Set VertexBufferLayout	
-	// 布局需要的信息：
-	/*
-		1. Name
-		2. 数据类型	----> 从数据类型需要知道类型的长度
-		3. 给的数据需要包含几个点
-		4. 每个点中包含几个数据
-		5. 两个数据点中间的偏移		可以通过数据类型来计算，要考虑到一个缓冲区的所有数据类型（比如Position和Color）
-		
-		重构数据进行测试， 加上颜色
-	*/
 	
-	{
-		BufferDataLayout layout = {
-			{"a_Position", BufferDataType::Float3},
-			{"a_Color", BufferDataType::Float4}
-		};
-		m_VertexBuffer->SetBufferDataLayout(layout);
-	}
-
-	uint32_t index = 0;
-	for (const auto& element : m_VertexBuffer->GetBufferDataLayout())
-	{
-		glEnableVertexAttribArray(index);
-		glVertexAttribPointer(index, 
-			element.GetComponentCount(),
-			BufferDataTypeToOpenGLBaseType(element.Type),
-			element.Normalized?GL_TRUE:GL_FALSE,
-			m_VertexBuffer->GetBufferDataLayout().GetStride(),
-			(const void*)element.Offset);
-		++index;
-	}
 
 	uint32_t indices[3] = {0,1,2};
-	m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices)/sizeof(uint32_t)));
+	std::shared_ptr<IndexBuffer> indexBuffer;
+	indexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices)/sizeof(uint32_t)));
+	HAZEL_CORE_ASSERT(m_VertexArray->SetIndexBuffer(indexBuffer), "Some Error in function SetIndexBuffer!");
 
 	const std::string vertexShaderResource = R"(
 		#version 330 core
@@ -145,8 +103,8 @@ void Hazel::Application::Run()
 		glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
 
 		m_Shader->Bind();
-		glBindVertexArray(m_VertexArray);
-		glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
+		m_VertexArray->Bind();
+		glDrawElements(GL_TRIANGLES, m_VertexArray->GetIndexBuffer()->GetCount() , GL_UNSIGNED_INT, nullptr);
 
 		for (auto layer : m_LayerStack)
 		{

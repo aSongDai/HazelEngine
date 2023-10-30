@@ -1,6 +1,7 @@
 #pragma once
 
 
+
 #ifdef HAZEL_PLATFORM_WINDOWS
 
 #if HAZEL_DYNAMIC_LINK
@@ -17,15 +18,22 @@
 	#error Hazel only support Windows!
 #endif // 
 
-//#ifdef HAZEL_DEBUG
-//#define HAZEL_ENABLE_ASSERTS
-//#endif
-//
-//#define HAZEL_ENABLE_ASSERTS 0
+#ifndef HAZEL_LOG
+#define HAZEL_LOG 
+#include "Hazel/HazelLog.h"
+#endif // !HAZEL_LOG
 
-#ifdef HAZEL_ENABLE_ASSERTS
-	#define HAZEL_CLIENT_ASSERT(x, ...) { if(!(x)){HAZEL_CLIENT_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak();}}
-	#define HAZEL_CORE_ASSERT(x, ...) {if(!(x)) {HAZEL_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak();}}
+#ifdef HAZEL_DEBUG
+#define HAZEL_ENABLE_ASSERTS
+#elif
+#define HAZEL_ENABLE_ASSERTS
+#endif
+
+#define HAZEL_ENABLE_ASSERTS 1
+
+#if HAZEL_ENABLE_ASSERTS
+	#define HAZEL_CLIENT_ASSERT(x, ...)		{ if(!(x)) {HAZEL_CLIENT_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak();}}
+	#define HAZEL_CORE_ASSERT(x, ...)		{ if(!(x)) {HAZEL_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak();}}
 #else
 	#define HAZEL_CLIENT_ASSERT(x, ...)
 	#define HAZEL_CORE_ASSERT(x, ...)

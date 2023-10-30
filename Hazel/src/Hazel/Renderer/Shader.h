@@ -7,7 +7,6 @@
 namespace Hazel
 {
 
-
 	class HAZEL_API Shader
 	{
 	public:

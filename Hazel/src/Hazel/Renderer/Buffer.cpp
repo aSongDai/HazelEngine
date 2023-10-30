@@ -31,7 +31,7 @@ namespace Hazel
 		default:
 			break;
 		}
-		HAZEL_CORE_ASSERT(false & "RenderAPI: Unknown!");
+		HAZEL_CORE_ASSERT(false, "RenderAPI: Unknown!");
 		return nullptr;
 	}
 }
