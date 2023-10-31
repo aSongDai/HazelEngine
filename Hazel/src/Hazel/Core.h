@@ -17,15 +17,16 @@
 	#error Hazel only support Windows!
 #endif // 
 
-//#ifdef HAZEL_DEBUG
-//#define HAZEL_ENABLE_ASSERTS
-//#endif
-//
-//#define HAZEL_ENABLE_ASSERTS 0
+#ifdef HAZEL_DEBUG
+#define HAZEL_ENABLE_ASSERTS
+#endif
 
-#ifdef HAZEL_ENABLE_ASSERTS
-	#define HAZEL_CLIENT_ASSERT(x, ...) { if(!(x)){HAZEL_CLIENT_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak();}}
-	#define HAZEL_CORE_ASSERT(x, ...) {if(!(x)) {HAZEL_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak();}}
+#define HAZEL_ENABLE_ASSERTS 1
+#include "Hazel/HazelLog.h"
+
+#if HAZEL_ENABLE_ASSERTS
+	#define HAZEL_CLIENT_ASSERT(x, ...)		{ if(!(x)) {HAZEL_CLIENT_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak();}}
+	#define HAZEL_CORE_ASSERT(x, ...)		{ if(!(x)) {HAZEL_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak();}}
 #else
 	#define HAZEL_CLIENT_ASSERT(x, ...)
 	#define HAZEL_CORE_ASSERT(x, ...)

@@ -2,8 +2,10 @@
 //#include "Events/ApplicationEvent.h"
 #include "Application.h"
 #include "HazelLog.h"
+#include "Hazel/Renderer/RendererCommand.h"
+#include "Hazel/Renderer/Renderer.h"
 
-#include <glad/glad.h>
+#include <glm/glm.hpp>
 
 Hazel::Application* Hazel::Application::m_Instance = nullptr;
 
@@ -20,10 +22,6 @@ Hazel::Application::Application()
 	
 
 	m_VertexArray.reset(VertexArray::Create());
-
-	// VertexArray
-	//glCreateVertexArrays(1, &m_VertexArray);
-	//glBindVertexArray(m_VertexArray);
 
 	float vertices[] = {
 		-0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
@@ -74,10 +72,10 @@ Hazel::Application::Application()
 	m_SquareVertexArray.reset(VertexArray::Create());
 	m_SquareVertexArray->Bind();
 	float square_vertices[] = {
-		-0.5f, -0.5f, 0.0f, 
-		 0.5f, -0.5f, 0.0f, 
-		 0.5f,  0.5f, 0.0f,
-		-0.5f,  0.5f, 0.0f
+		-0.6f, -0.6f, 0.0f, 
+		 0.6f, -0.6f, 0.0f, 
+		 0.6f,  0.6f, 0.0f,
+		-0.6f,  0.6f, 0.0f
 	};
 	BufferLayout square_layout =
 	{
@@ -107,7 +105,7 @@ Hazel::Application::Application()
 		layout (location = 0) out vec4 color;
 		void main()
 		{
-			color = vec4(0.4f, 0.5f, 0.1f, 1.0f);
+			color = vec4(0.2f, 0.3f, 0.8f, 1.0f);
 		} 
 	)";
 
@@ -140,7 +138,8 @@ void Hazel::Application::Run()
 {
 	while (m_Running)
 	{
-		glClear(GL_COLOR_BUFFER_BIT);
+		// ·â×°drawcall
+		/*glClear(GL_COLOR_BUFFER_BIT);
 		glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
 
 		m_SquareShader->Bind();
@@ -149,7 +148,21 @@ void Hazel::Application::Run()
 
 		m_Shader->Bind();
 		m_VertexArray->Bind();
-		glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
+		glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);*/
+		// 
+		RendererCommand::Clear();
+		RendererCommand::ClearColor({ 0.45f, 0.55f, 0.60f, 1.00f });
+
+		Renderer::BeginScene();
+
+		m_SquareShader->Bind();
+		Renderer::Submit(m_SquareVertexArray);
+
+		m_Shader->Bind();
+		Renderer::Submit(m_VertexArray);
+
+		Renderer::EndScene();
+		
 
 		for (auto layer : m_LayerStack)
 		{

@@ -30,7 +30,7 @@ namespace Hazel
 		case Hazel::BufferDataType::Int4:			return 4 * 4;
 		case Hazel::BufferDataType::Bool:			return 1;
 		}
-		HAZEL_CORE_ASSERT(false & "Unknown buffer data type!");
+		HAZEL_CORE_ASSERT(false, "Unknown buffer data type!");
 		return 0;
 	}
 
@@ -65,7 +65,7 @@ namespace Hazel
 			case Hazel::BufferDataType::Int4:			return 4;
 			case Hazel::BufferDataType::Bool:			return 1;
 			}
-			HAZEL_CORE_ASSERT(false & "Unknown DataType!");
+			HAZEL_CORE_ASSERT(false, "Unknown DataType!");
 			return 0;
 		}
 	};

@@ -2,5 +2,5 @@
 
 namespace Hazel
 {
-	RenderEnum RenderAPI::s_RendererAPI = RenderEnum::OpenGLAPI;
+	RenderEnum RendererAPI::s_RendererAPI = RenderEnum::OpenGLAPI;
 }

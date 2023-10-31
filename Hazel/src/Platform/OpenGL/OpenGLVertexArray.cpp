@@ -23,7 +23,7 @@ namespace Hazel
 		case Hazel::BufferDataType::Int4:		return GL_INT;
 		case Hazel::BufferDataType::Bool:		return GL_BOOL;
 		}
-		HAZEL_CORE_ASSERT(false & "Unknown DataType!");
+		HAZEL_CORE_ASSERT(false, "Unknown DataType!");
 		return GL_NONE;
 	}
 	

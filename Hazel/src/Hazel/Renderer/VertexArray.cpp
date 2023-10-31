@@ -7,12 +7,12 @@ namespace Hazel
 {
 	VertexArray* VertexArray::Create()
 	{
-		switch (RenderAPI::GetAPI())
+		switch (RendererAPI::GetAPI())
 		{
 		case RenderEnum::None:				return nullptr;
 		case RenderEnum::OpenGLAPI:			return new OpenGLVertexArray();
 		}
-		HAZEL_CORE_ASSERT(false & "Unknown RendererAPI!");
+		HAZEL_CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
 	}
 }
