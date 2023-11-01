@@ -6,7 +6,7 @@ namespace Hazel
 {
 	VertexArray* VertexArray::Create()
 	{
-		switch (RenderAPI::GetAPI())
+		switch (RendererAPI::GetAPI())
 		{
 		case RenderEnum::None:			HAZEL_CORE_ASSERT(false, "Please Set a RenderAPI!"); return nullptr;
 		case RenderEnum::OpenGLAPI:		return new OpenGLVertexArray();

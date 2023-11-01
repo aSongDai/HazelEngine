@@ -7,7 +7,7 @@ namespace Hazel
 {
 	VertexBuffer* VertexBuffer::Create(float* vertices, uint32_t size)
 	{
-		switch (RenderAPI::GetAPI())
+		switch (RendererAPI::GetAPI())
 		{
 		case RenderEnum::None:
 			HAZEL_CORE_ASSERT(false, "RendererAPI: None is not supported current.");
@@ -21,7 +21,7 @@ namespace Hazel
 
 	IndexBuffer* IndexBuffer::Create(uint32_t* indices, uint32_t count)
 	{
-		switch (RenderAPI::GetAPI())
+		switch (RendererAPI::GetAPI())
 		{
 		case RenderEnum::None:
 			HAZEL_CORE_ASSERT(false, "RenderAPI: None is not supported current.");

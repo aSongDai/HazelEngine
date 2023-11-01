@@ -2,6 +2,8 @@
 //#include "Events/ApplicationEvent.h"
 #include "Application.h"
 #include "HazelLog.h"
+#include "Hazel/Renderer/Renderer.h"
+
 
 #include <glad/glad.h>
 
@@ -27,7 +29,7 @@ Hazel::Application::Application()
 	float vertices[] = {
 		-0.5f, -0.5f, 0.0f,	1.0f, 0.0f, 0.0f, 1.0f,
 		 0.5f, -0.5f, 0.0f,	0.0f, 1.0f, 0.0f, 1.0f,
-		 0.0f,  0.5f, 0.0f,	0.0f, 0.0f, 0.0f, 1.0f
+		 0.0f,  0.5f, 0.0f,	0.0f, 0.0f, 1.0f, 1.0f
 	};
 
 	std::shared_ptr<VertexBuffer> vertexBuffer;
@@ -99,12 +101,15 @@ void Hazel::Application::Run()
 {
 	while (m_Running)
 	{
-		glClear(GL_COLOR_BUFFER_BIT);
-		glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
+		RendererCommand::Clear();
+		RendererCommand::ClearColor({ 0.45f, 0.55f, 0.60f, 1.00f });
+		// Renderer
+		Renderer::BeginScene();
 
 		m_Shader->Bind();
-		m_VertexArray->Bind();
-		glDrawElements(GL_TRIANGLES, m_VertexArray->GetIndexBuffer()->GetCount() , GL_UNSIGNED_INT, nullptr);
+		Renderer::Submit(m_VertexArray);
+
+		Renderer::EndScene();
 
 		for (auto layer : m_LayerStack)
 		{
