@@ -10,6 +10,8 @@
 #include "Hazel/Renderer/Buffer.h"
 #include "Hazel/Renderer/Buffer.h"
 #include "Hazel/Renderer/VertexArray.h"
+#include "Hazel/Renderer/OrthogonalCamera.h"
+
 
 #include <memory>
 
@@ -53,6 +55,8 @@ namespace Hazel
 
 		std::shared_ptr<VertexArray> m_SquareVertexArray;
 		std::shared_ptr<Shader> m_SquareShader;
+
+		OrthogonalCamera m_Camera;
 
 	private :
 		static Application* m_Instance;

@@ -11,6 +11,7 @@ Hazel::Application* Hazel::Application::m_Instance = nullptr;
 
 
 Hazel::Application::Application()
+	:m_Camera(-1.6f, 1.6f, 0.9f, -0.9f)
 {
 	HAZEL_CORE_ASSERT(!m_Instance, "Application already exists!");
 	m_Instance = this;
@@ -46,13 +47,16 @@ Hazel::Application::Application()
 		#version 330 core
 		layout (location = 0) in vec3 a_Position;
 		layout (location = 1) in vec4 a_Color;
+
+		uniform mat4 u_ViewProjectionMatrix;		
+
 		out vec3 v_Position;
 		out vec4 v_Color;
 		void main()
 		{
 			v_Position  = a_Position;
 			v_Color = a_Color;
-			gl_Position = vec4(a_Position, 1.0);
+			gl_Position = u_ViewProjectionMatrix * vec4(a_Position, 1.0);
 		}
 	)";
 	const std::string fragmentShaderResource = R"(
@@ -95,9 +99,11 @@ Hazel::Application::Application()
 	std::string squareVertexShaderSrc = R"(
 		#version 330 core
 		layout (location = 0) in vec3 a_Position;
+
+		uniform mat4 u_ViewProjectionMatrix;
 		void main()
 		{
-			gl_Position = vec4(a_Position, 1.0);
+			gl_Position = u_ViewProjectionMatrix * vec4(a_Position, 1.0);
 		}
 	)";
 	std::string squareFragmentShaderSrc = R"(
@@ -138,28 +144,16 @@ void Hazel::Application::Run()
 {
 	while (m_Running)
 	{
-		// ·â×°drawcall
-		/*glClear(GL_COLOR_BUFFER_BIT);
-		glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
 
-		m_SquareShader->Bind();
-		m_SquareVertexArray->Bind();
-		glDrawElements(GL_TRIANGLES, m_SquareVertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
-
-		m_Shader->Bind();
-		m_VertexArray->Bind();
-		glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);*/
-		// 
 		RendererCommand::Clear();
 		RendererCommand::ClearColor({ 0.45f, 0.55f, 0.60f, 1.00f });
 
-		Renderer::BeginScene();
+		m_Camera.SetPosition({ 1.0f, 0.5f, 0.0f });
+		m_Camera.SetRotation(45.0f);
+		Renderer::BeginScene(m_Camera);
 
-		m_SquareShader->Bind();
-		Renderer::Submit(m_SquareVertexArray);
-
-		m_Shader->Bind();
-		Renderer::Submit(m_VertexArray);
+		Renderer::Submit(m_SquareVertexArray, m_SquareShader); 
+		Renderer::Submit(m_VertexArray, m_Shader);
 
 		Renderer::EndScene();
 		
