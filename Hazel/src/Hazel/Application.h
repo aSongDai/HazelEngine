@@ -5,6 +5,7 @@
 #include "Events/ApplicationEvent.h"
 #include "LayerStack.h"
 #include "Input.h"
+#include "Camera.h"
 #include "ImGui/ImGuiLayer.h"
 #include "Hazel/Renderer/Shader.h"
 #include "Hazel/Renderer/Buffer.h"
@@ -29,7 +30,7 @@ namespace Hazel
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* overlay);
 
-		// 事件	-> 主要是dispatcher
+		// 事件	-> 主要是 dispatcher
 		void OnEvent(Event& e);
 		
 		inline static Application& Get() { return *m_Instance; }
@@ -41,9 +42,11 @@ namespace Hazel
 		bool m_Running = true;
 		LayerStack m_LayerStack;
 
-		// Graphic		可以在初始化结束后将buffer指针销毁
+		// Graphic						可以在初始化结束后将 buffer 指针销毁
 		std::shared_ptr<VertexArray> m_VertexArray;
 		std::shared_ptr<Shader> m_Shader;
+
+		Camera* m_Camera;
 
 	private :
 		static Application* m_Instance;

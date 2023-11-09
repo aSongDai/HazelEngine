@@ -1,7 +1,11 @@
 #include "Shader.h"	
 #include "Hazel/HazelLog.h"
 
-#include "glad/glad.h"
+
+
+#include <glad/glad.h>
+#include <glm/gtc/type_ptr.hpp>
+
 
 #include <vector>
 
@@ -104,5 +108,11 @@ namespace Hazel
 	void Shader::UnBind() const 
 	{
 		glUseProgram(0);
+	}
+
+	void Shader::UploadUniformMatrix(const std::string& name, const glm::mat4& viewProjectionMatrix)
+	{
+		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(viewProjectionMatrix));
 	}
 }

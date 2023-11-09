@@ -159,6 +159,7 @@
     <ClInclude Include="src\Hazel.h" />
     <ClInclude Include="src\Hazel\Application.h" />
     <ClInclude Include="src\Hazel\ButtonCode.h" />
+    <ClInclude Include="src\Hazel\Camera.h" />
     <ClInclude Include="src\Hazel\Core.h" />
     <ClInclude Include="src\Hazel\EntryPointer.h" />
     <ClInclude Include="src\Hazel\Events\ApplicationEvent.h" />
@@ -173,6 +174,7 @@
     <ClInclude Include="src\Hazel\LayerStack.h" />
     <ClInclude Include="src\Hazel\Renderer\Buffer.h" />
     <ClInclude Include="src\Hazel\Renderer\GraphicContext.h" />
+    <ClInclude Include="src\Hazel\Renderer\OrthoGraphicCamera.h" />
     <ClInclude Include="src\Hazel\Renderer\RenderAPI.h" />
     <ClInclude Include="src\Hazel\Renderer\Renderer.h" />
     <ClInclude Include="src\Hazel\Renderer\RendererCommand.h" />
@@ -218,6 +220,7 @@
     <ClCompile Include="src\Hazel\Layer.cpp" />
     <ClCompile Include="src\Hazel\LayerStack.cpp" />
     <ClCompile Include="src\Hazel\Renderer\Buffer.cpp" />
+    <ClCompile Include="src\Hazel\Renderer\OrthoGraphicCamera.cpp" />
     <ClCompile Include="src\Hazel\Renderer\RenderAPI.cpp" />
     <ClCompile Include="src\Hazel\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Hazel\Renderer\RendererCommand.cpp" />
