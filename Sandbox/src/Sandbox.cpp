@@ -27,7 +27,7 @@ namespace Hazel
 	public:
 		ExampleLayer()
 			:Layer("Example"), m_Camera(-1.6f, 1.6f, 0.9f, -0.9f), m_CameraMoveSpeed(0.1f),
-			m_CameraPosition(0.0f)
+			m_CameraPosition(0.0f), m_CameraRotation(0.0f), m_cameraRotationSpeed(1.0f)
 		{
 			m_VertexArray.reset(VertexArray::Create());
 
@@ -132,7 +132,7 @@ namespace Hazel
 			Hazel::RendererCommand::ClearColor({ 0.45f, 0.55f, 0.60f, 1.00f });
 
 			m_Camera.SetPosition(m_CameraPosition);
-			m_Camera.SetRotation(0.0f);
+			m_Camera.SetRotation(m_CameraRotation);
 			Hazel::Renderer::BeginScene(m_Camera);
 
 			Hazel::Renderer::Submit(m_SquareVertexArray, m_SquareShader);
@@ -148,10 +148,8 @@ namespace Hazel
 
 		virtual void OnEvent(Hazel::Event& event) override
 		{
-			
 			EventDispatcher dispatcher(event);
 			dispatcher.Dispatch<KeyPressEvent>(HAZEL_BIND_EVENT_FUNCTION(ExampleLayer::OnKeyPressEvent));
-
 		}
 
 		bool OnKeyPressEvent(KeyPressEvent& event)
@@ -172,6 +170,16 @@ namespace Hazel
 			{
 				m_CameraPosition.y += m_CameraMoveSpeed;
 			}
+			if (event.GetKeyCode() == HAZEL_KEY_LEFT)
+			{
+				// 
+				m_CameraRotation -= m_cameraRotationSpeed;
+				
+			}
+			if (event.GetKeyCode() == HAZEL_KEY_RIGHT)
+			{
+				m_CameraRotation += m_cameraRotationSpeed;
+			}
 			return false;
 		}
 
@@ -186,30 +194,29 @@ namespace Hazel
 
 		Hazel::OrthogonalCamera m_Camera;
 		glm::vec3 m_CameraPosition;
+		float m_CameraRotation;
+		float m_cameraRotationSpeed;
 		float m_CameraMoveSpeed;
 	};
 }
 
 
 
-namespace Hazel
+class HAZEL_API Sandbox : public Hazel::Application
 {
-	class HAZEL_API Sanbox : public Application
+public:
+	Sandbox()
+		: Hazel::Application()
 	{
-	public:
-		Sanbox()
-			: Application()
-		{
-			PushLayer(new ExampleLayer);
-		}
-		~Sanbox() = default;
-
-	private:
-
-	};
-
-	Application* CreateApplication()
-	{
-		return new Sanbox();
+		PushLayer(new Hazel::ExampleLayer);
 	}
+	~Sandbox() = default;
+
+private:
+
+};
+
+Hazel::Application* Hazel::CreateApplication()
+{
+	return new Sandbox();
 }
