@@ -62,7 +62,7 @@ namespace Hazel
 
 	};
 
-	class HAZEL_API EventDispatcher
+	class HAZEL_API EventDispatcher							// 使用 std::forward 来转发
 	{
 		template<typename T>
 		using EventFunction = std::function<bool(T&)>;
@@ -81,6 +81,11 @@ namespace Hazel
 			return false;
 		}
 
+		template<typename T>
+		bool DispatchtoFunction(T function)
+		{
+
+		}
 
 	private:
 		Event& m_Event;
