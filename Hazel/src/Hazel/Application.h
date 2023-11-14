@@ -32,7 +32,7 @@ namespace Hazel
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* overlay);
 
-		// 事件	-> 主要是dispatcher
+		// 事件	-> 主要是 dispatcher
 		void OnEvent(Event& e);
 		
 		inline static Application& Get() { return *m_Instance; }
@@ -43,20 +43,6 @@ namespace Hazel
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		LayerStack m_LayerStack;
-
-		// Graphic
-		//uint32_t m_VertexArray;
-		//unsigned int m_VertexBuffer;
-		//unsigned int m_IndexBuffer;
-		std::shared_ptr<VertexArray> m_VertexArray;
-		std::shared_ptr<VertexBuffer> m_VertexBuffer;
-		std::shared_ptr<IndexBuffer> m_IndexBuffer;
-		std::shared_ptr<Shader> m_Shader;
-
-		std::shared_ptr<VertexArray> m_SquareVertexArray;
-		std::shared_ptr<Shader> m_SquareShader;
-
-		OrthogonalCamera m_Camera;
 
 	private :
 		static Application* m_Instance;

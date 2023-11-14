@@ -116,6 +116,7 @@ project "Sandbox"
 	includedirs											-- include directory
 	{
 		"Hazel/vendor/spdlog/include",
+		"Hazel/vendor/Glad/include",
 		"Hazel/src",
 		"%{IncludeDir.glm}"
 	}
@@ -132,7 +133,6 @@ project "Sandbox"
 		defines
 		{
 			"HAZEL_PLATFORM_WINDOWS",
-
 		}
 
 	filter "configurations:Debug"
