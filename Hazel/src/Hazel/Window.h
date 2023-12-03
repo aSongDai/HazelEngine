@@ -44,8 +44,8 @@ namespace Hazel
 
 		virtual void* GetNativeWindow() const = 0;
 
+	public:													// static function
 		static Window* Create(const WindowProps& props = WindowProps());
-
 	public:
 		GraphicContext* m_GraphicContext;
 

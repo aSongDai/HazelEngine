@@ -160,6 +160,7 @@
     <ClInclude Include="src\Hazel\Application.h" />
     <ClInclude Include="src\Hazel\ButtonCode.h" />
     <ClInclude Include="src\Hazel\Core.h" />
+    <ClInclude Include="src\Hazel\Core\TimeStep.h" />
     <ClInclude Include="src\Hazel\EntryPointer.h" />
     <ClInclude Include="src\Hazel\Events\ApplicationEvent.h" />
     <ClInclude Include="src\Hazel\Events\Event.h" />

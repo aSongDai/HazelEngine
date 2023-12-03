@@ -12,6 +12,8 @@
 #include "Hazel/Renderer/VertexArray.h"
 #include "Hazel/Renderer/OrthogonalCamera.h"
 
+#include "Hazel/Core/TimeStep.h"
+
 
 #include <memory>
 
@@ -34,15 +36,17 @@ namespace Hazel
 
 		// 事件	-> 主要是 dispatcher
 		void OnEvent(Event& e);
+		inline Window& GetWindow() { return *m_Window; }
 		
 		inline static Application& Get() { return *m_Instance; }
-		inline Window& GetWindow() { return *m_Window; }
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
+	private:
 		std::unique_ptr<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		LayerStack m_LayerStack;
+		float m_LastFrameTime;
 
 	private :
 		static Application* m_Instance;

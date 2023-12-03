@@ -2,6 +2,14 @@
 	
 	This engine is for learning purposes only.
 
+## master
+	
+	This branch is written directly from the video.
+
+## smine 
+
+	This branch is a program written based on some of my own understanding.
+
 ##### 切换分支
 使用
 ~~~

@@ -9,7 +9,7 @@ namespace Hazel
 	public:
 		inline unsigned int GetKeyCode() { return m_keyCode; }
 
-		EVENT_CATEGORY(EventCategoryKeyBoard)
+		EVENT_CATEGORY(EventCategoryKeyBoard);
 
 	protected:
 		KeyEvent(unsigned int  keycode):m_keyCode(keycode){}

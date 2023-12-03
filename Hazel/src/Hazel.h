@@ -6,7 +6,9 @@
 #include "Hazel/Application.h"
 #include "Hazel/HazelLog.h"
 #include "Hazel/Layer.h"
-#include "hazel/ImGui/ImGuiLayer.h"
+#include "Hazel/ImGui/ImGuiLayer.h"
+
+#include "Hazel/Core/TimeStep.h"
 
 #include "Hazel/Input.h"	
 #include "Hazel/KeyCode.h"
