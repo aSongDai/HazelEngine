@@ -1,14 +1,10 @@
 
 #include "Hazel.h"
 
-#include "glm/glm.hpp"
 
-#include <glm/vec3.hpp> // glm::vec3
-#include <glm/vec4.hpp> // glm::vec4
-#include <glm/mat4x4.hpp> // glm::mat4
-#include <glm/ext/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale
-#include <glm/ext/matrix_clip_space.hpp> // glm::perspective
-#include <glm/ext/scalar_constants.hpp> // glm::pi
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 
 //glm::mat4 camera(float Translate, glm::vec2 const& Rotate)
 //{
@@ -26,7 +22,8 @@ class ExampleLayer :public Hazel::Layer
 public:
 	ExampleLayer()
 		:Layer("Example"), m_Camera(-1.6f, 1.6f, 0.9f, -0.9f), m_CameraMoveSpeed(1.0f),
-		m_CameraPosition(0.0f), m_CameraRotation(0.0f), m_cameraRotationSpeed(10.f)
+		m_CameraPosition(0.0f), m_CameraRotation(0.0f), m_cameraRotationSpeed(10.f),
+		m_ProjectPosition(glm::vec3(1.0f))
 	{
 		m_VertexArray.reset(Hazel::VertexArray::Create());
 
@@ -54,7 +51,8 @@ public:
 			layout (location = 0) in vec3 a_Position;
 			layout (location = 1) in vec4 a_Color;
 
-			uniform mat4 u_ViewProjectionMatrix;		
+			uniform mat4 u_ViewProjectionMatrix;	
+			uniform mat4 u_TransformMatrix;	
 
 			out vec3 v_Position;
 			out vec4 v_Color;
@@ -62,7 +60,7 @@ public:
 			{
 				v_Position  = a_Position;
 				v_Color = a_Color;
-				gl_Position = u_ViewProjectionMatrix * vec4(a_Position, 1.0);
+				gl_Position = u_ViewProjectionMatrix * u_TransformMatrix * vec4(a_Position, 1.0);
 			}
 		)";
 		const std::string fragmentShaderResource = R"(
@@ -107,9 +105,10 @@ public:
 			layout (location = 0) in vec3 a_Position;
 
 			uniform mat4 u_ViewProjectionMatrix;
+			uniform mat4 u_TransformMatrix;
 			void main()
 			{
-				gl_Position = u_ViewProjectionMatrix * vec4(a_Position, 1.0);
+				gl_Position = u_ViewProjectionMatrix * u_TransformMatrix * vec4(a_Position, 1.0);
 			}
 		)";
 		std::string squareFragmentShaderSrc = R"(
@@ -127,7 +126,7 @@ public:
 
 	virtual void OnUpdate(Hazel::TimeStep& deltaTime) override
 	{
-		HAZEL_CLIENT_TRACE("TiemStep: {0}s \t {1}ms", deltaTime.GetTime(), deltaTime.GetMilliSecond());
+		//HAZEL_CLIENT_TRACE("TimeStep: {0}s \t {1}ms", deltaTime.GetTime(), deltaTime.GetMilliSecond());
 
 		Hazel::RendererCommand::Clear();
 		Hazel::RendererCommand::ClearColor({ 0.45f, 0.55f, 0.60f, 1.00f });
@@ -136,7 +135,10 @@ public:
 		m_Camera.SetRotation(m_CameraRotation);
 		Hazel::Renderer::BeginScene(m_Camera);
 
-		Hazel::Renderer::Submit(m_SquareVertexArray, m_SquareShader);
+
+		// 物体的变换是独立与相机的变换的
+		glm::mat4 squareTransform = glm::translate(glm::mat4(1.0f), m_ProjectPosition);
+		Hazel::Renderer::Submit(m_SquareVertexArray, m_SquareShader, squareTransform);
 		Hazel::Renderer::Submit(m_VertexArray, m_Shader);
 
 		Hazel::Renderer::EndScene();
@@ -165,6 +167,25 @@ public:
 		{
 			m_CameraRotation += m_cameraRotationSpeed * deltaTime;
 		}
+
+
+		if (Hazel::Input::IsKeyPressed(HAZEL_KEY_J))
+		{
+			m_ProjectPosition.x -= m_CameraMoveSpeed * deltaTime;
+		}
+		if (Hazel::Input::IsKeyPressed(HAZEL_KEY_L))
+		{
+			m_ProjectPosition.x += m_CameraMoveSpeed * deltaTime;
+		}
+		if (Hazel::Input::IsKeyPressed(HAZEL_KEY_K))
+		{
+			m_ProjectPosition.y -= m_CameraMoveSpeed * deltaTime;
+		}
+		if (Hazel::Input::IsKeyPressed(HAZEL_KEY_I))
+		{
+			m_ProjectPosition.y += m_CameraMoveSpeed * deltaTime;
+		}
+
 	}
 
 	virtual void OnImGuiRender() override
@@ -190,6 +211,8 @@ private:
 	float m_CameraRotation;
 	float m_cameraRotationSpeed;
 	float m_CameraMoveSpeed;
+
+	glm::vec3 m_ProjectPosition;
 };
 
 

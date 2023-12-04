@@ -5,6 +5,7 @@
 #include "OrthogonalCamera.h"
 #include "Shader.h"
 
+
 namespace Hazel
 {
 	class HAZEL_API Renderer
@@ -13,7 +14,7 @@ namespace Hazel
 		static void BeginScene(OrthogonalCamera& camera);
 		static void EndScene();
 
-		static void Submit(const std::shared_ptr<VertexArray>&, const std::shared_ptr<Shader>&);
+		static void Submit(const std::shared_ptr<VertexArray>&, const std::shared_ptr<Shader>&, glm::mat4 transform = glm::mat4(1.0f));
 
 	private:
 		struct SceneData
