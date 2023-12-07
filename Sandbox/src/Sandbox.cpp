@@ -122,6 +122,50 @@ public:
 
 		m_SquareShader.reset(new Hazel::Shader(squareVertexShaderSrc, squareFragmentShaderSrc));
 
+
+		// redColorShader
+		std::string redVertexShaderSrc = R"(
+			#version 330 core
+			layout (location = 0) in vec3 a_Position;
+
+			uniform mat4 u_ViewProjectionMatrix;
+			uniform mat4 u_TransformMatrix;
+			void main()
+			{
+				gl_Position = u_ViewProjectionMatrix * u_TransformMatrix * vec4(a_Position, 1.0);
+			}
+		)";
+		std::string redFragmentShaderSrc = R"(
+			#version 330 core
+			layout (location = 0) out vec4 color;
+			void main()
+			{
+				color = vec4(0.8f, 0.2f, 0.3f, 1.0f);
+			} 
+		)";
+		m_RedColorShader.reset(new Hazel::Shader(redVertexShaderSrc, redFragmentShaderSrc));
+
+		// blueColorShader
+		std::string blueVertexShaderSrc = R"(
+			#version 330 core
+			layout (location = 0) in vec3 a_Position;
+
+			uniform mat4 u_ViewProjectionMatrix;
+			uniform mat4 u_TransformMatrix;
+			void main()
+			{
+				gl_Position = u_ViewProjectionMatrix * u_TransformMatrix * vec4(a_Position, 1.0);
+			}
+		)";
+		std::string blueFragmentShaderSrc = R"(
+			#version 330 core
+			layout (location = 0) out vec4 color;
+			void main()
+			{
+				color = vec4(0.2f, 0.3f, 0.8f, 1.0f);
+			} 
+		)";
+		m_BlueColorShader.reset(new Hazel::Shader(blueVertexShaderSrc, blueFragmentShaderSrc));
 	}
 
 	virtual void OnUpdate(Hazel::TimeStep& deltaTime) override
@@ -135,11 +179,28 @@ public:
 		m_Camera.SetRotation(m_CameraRotation);
 		Hazel::Renderer::BeginScene(m_Camera);
 
-
-		// 物体的变换是独立与相机的变换的
-		glm::mat4 squareTransform = glm::translate(glm::mat4(1.0f), m_ProjectPosition);
-		Hazel::Renderer::Submit(m_SquareVertexArray, m_SquareShader, squareTransform);
+		
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+		for (int i = 0; i < 20; ++i)
+		{
+			for (int j = 0; j < 20; ++j)
+			{
+				glm::vec3 position(i * 0.11f, j * 0.11f, 0.0f);
+				glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * scale;
+				if (i % 2)
+				{
+					Hazel::Renderer::Submit(m_SquareVertexArray, m_BlueColorShader, transform);
+				}
+				else
+				{
+					Hazel::Renderer::Submit(m_SquareVertexArray, m_RedColorShader, transform);
+				}
+			}
+		}
+		
 		Hazel::Renderer::Submit(m_VertexArray, m_Shader);
+
+
 
 		Hazel::Renderer::EndScene();
 
@@ -202,9 +263,12 @@ private:
 	std::shared_ptr<Hazel::VertexBuffer> m_VertexBuffer;
 	std::shared_ptr<Hazel::IndexBuffer> m_IndexBuffer;
 	std::shared_ptr<Hazel::Shader> m_Shader;
-
 	std::shared_ptr<Hazel::VertexArray> m_SquareVertexArray;
 	std::shared_ptr<Hazel::Shader> m_SquareShader;
+
+	// Test
+	std::shared_ptr<Hazel::Shader> m_RedColorShader;
+	std::shared_ptr<Hazel::Shader> m_BlueColorShader;
 
 	Hazel::OrthogonalCamera m_Camera;
 	glm::vec3 m_CameraPosition;
