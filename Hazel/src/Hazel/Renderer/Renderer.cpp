@@ -1,6 +1,7 @@
 #include "Renderer.h"
 
 #include "RendererCommand.h"
+#include "Platform/OpenGL/OpenGLShader.h"
 
 namespace Hazel
 {
@@ -22,9 +23,12 @@ namespace Hazel
 
 	void Renderer::Submit(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader, glm::mat4 transform)
 	{
+
 		shader->Bind();
-		shader->UploadUniformMat4("u_ViewProjectionMatrix", s_SceneData->ViewProjectionMatrix);
-		shader->UploadUniformMat4("u_TransformMatrix", transform);
+		// get the data(viewProjectionMatrix) from the 'Scene Data' and upload to the shader.
+		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMatrix4("u_ViewProjectionMatrix", s_SceneData->ViewProjectionMatrix);
+		// get the data(transform) from the main function and upload it to the shader.
+		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMatrix4("u_TransformMatrix", transform);
 
 		RendererCommand::DrawIndexed(vertexArray);
 	}

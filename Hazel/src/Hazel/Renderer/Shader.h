@@ -1,7 +1,6 @@
 #pragma once
 #include "Hazel/Core.h"	
 
-#include <glm/glm.hpp>
 #include <string>
 
 namespace Hazel
@@ -11,14 +10,11 @@ namespace Hazel
 	class HAZEL_API Shader
 	{
 	public:
-		Shader(const std::string& vertexShaderSource, const std::string& fragmentShaderSource);
-		~Shader();
+		virtual ~Shader() = default;
 
-		void Bind() const;
-		void UnBind() const;
-
-		void UploadUniformMat4(const std::string&, const glm::mat4&);
-	private:
-		uint32_t m_RendererID;
+		virtual void Bind() const = 0;
+		virtual void UnBind() const = 0;
+		
+		static Shader* Create(const std::string&, const std::string&);
 	};
 }

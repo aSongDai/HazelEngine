@@ -118,7 +118,8 @@ project "Sandbox"
 		"Hazel/vendor/spdlog/include",
 		"Hazel/vendor/Glad/include",
 		"Hazel/src",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.imgui}"
 	}
 
 	links												-- Links of multi project 

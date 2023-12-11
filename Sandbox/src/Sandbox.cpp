@@ -4,7 +4,9 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
+#include <Hazel/vendor/imgui/imgui.h>
 
 //glm::mat4 camera(float Translate, glm::vec2 const& Rotate)
 //{
@@ -74,7 +76,7 @@ public:
 			}
 		)";
 		// Shader
-		m_Shader.reset(new Hazel::Shader(vertexShaderResource, fragmentShaderResource));
+		m_Shader.reset(Hazel::Shader::Create(vertexShaderResource, fragmentShaderResource));
 
 		// Square Render
 		m_SquareVertexArray.reset(Hazel::VertexArray::Create());
@@ -114,13 +116,15 @@ public:
 		std::string squareFragmentShaderSrc = R"(
 			#version 330 core
 			layout (location = 0) out vec4 color;
+
+			uniform vec3 u_Color;
 			void main()
 			{
-				color = vec4(0.2f, 0.3f, 0.8f, 1.0f);
+				color = vec4(u_Color, 1.0f);
 			} 
 		)";
 
-		m_SquareShader.reset(new Hazel::Shader(squareVertexShaderSrc, squareFragmentShaderSrc));
+		m_SquareShader.reset(Hazel::Shader::Create(squareVertexShaderSrc, squareFragmentShaderSrc));
 
 
 		// redColorShader
@@ -143,7 +147,7 @@ public:
 				color = vec4(0.8f, 0.2f, 0.3f, 1.0f);
 			} 
 		)";
-		m_RedColorShader.reset(new Hazel::Shader(redVertexShaderSrc, redFragmentShaderSrc));
+		m_RedColorShader.reset(Hazel::Shader::Create(redVertexShaderSrc, redFragmentShaderSrc));
 
 		// blueColorShader
 		std::string blueVertexShaderSrc = R"(
@@ -165,45 +169,12 @@ public:
 				color = vec4(0.2f, 0.3f, 0.8f, 1.0f);
 			} 
 		)";
-		m_BlueColorShader.reset(new Hazel::Shader(blueVertexShaderSrc, blueFragmentShaderSrc));
+		m_BlueColorShader.reset(Hazel::Shader::Create(blueVertexShaderSrc, blueFragmentShaderSrc));
 	}
 
 	virtual void OnUpdate(Hazel::TimeStep& deltaTime) override
 	{
 		//HAZEL_CLIENT_TRACE("TimeStep: {0}s \t {1}ms", deltaTime.GetTime(), deltaTime.GetMilliSecond());
-
-		Hazel::RendererCommand::Clear();
-		Hazel::RendererCommand::ClearColor({ 0.45f, 0.55f, 0.60f, 1.00f });
-
-		m_Camera.SetPosition(m_CameraPosition);
-		m_Camera.SetRotation(m_CameraRotation);
-		Hazel::Renderer::BeginScene(m_Camera);
-
-		
-		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
-		for (int i = 0; i < 20; ++i)
-		{
-			for (int j = 0; j < 20; ++j)
-			{
-				glm::vec3 position(i * 0.11f, j * 0.11f, 0.0f);
-				glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * scale;
-				if (i % 2)
-				{
-					Hazel::Renderer::Submit(m_SquareVertexArray, m_BlueColorShader, transform);
-				}
-				else
-				{
-					Hazel::Renderer::Submit(m_SquareVertexArray, m_RedColorShader, transform);
-				}
-			}
-		}
-		
-		Hazel::Renderer::Submit(m_VertexArray, m_Shader);
-
-
-
-		Hazel::Renderer::EndScene();
-
 		if (Hazel::Input::IsKeyPressed(HAZEL_KEY_A))
 		{
 			m_CameraPosition.x -= m_CameraMoveSpeed * deltaTime;
@@ -229,7 +200,6 @@ public:
 			m_CameraRotation += m_cameraRotationSpeed * deltaTime;
 		}
 
-
 		if (Hazel::Input::IsKeyPressed(HAZEL_KEY_J))
 		{
 			m_ProjectPosition.x -= m_CameraMoveSpeed * deltaTime;
@@ -247,11 +217,36 @@ public:
 			m_ProjectPosition.y += m_CameraMoveSpeed * deltaTime;
 		}
 
+
+		Hazel::RendererCommand::Clear();
+		Hazel::RendererCommand::ClearColor({ 0.45f, 0.55f, 0.60f, 1.00f });
+
+		m_Camera.SetPosition(m_CameraPosition);
+		m_Camera.SetRotation(m_CameraRotation);
+		Hazel::Renderer::BeginScene(m_Camera);
+
+		
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+		
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_SquareShader)->Bind();
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_SquareShader)->UploadUniformFloat3("u_Color", m_SquareColor);
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_ProjectPosition);
+		Hazel::Renderer::Submit(m_SquareVertexArray, m_SquareShader, transform);
+		
+		Hazel::Renderer::Submit(m_VertexArray, m_Shader);
+
+		Hazel::Renderer::EndScene();
+
+
 	}
 
 	virtual void OnImGuiRender() override
 	{
+		ImGui::Begin("Settings");
 
+		ImGui::ColorEdit3("Square Color", glm::value_ptr(m_SquareColor));
+
+		ImGui::End();
 	}
 
 	virtual void OnEvent(Hazel::Event& event) override
@@ -277,6 +272,7 @@ private:
 	float m_CameraMoveSpeed;
 
 	glm::vec3 m_ProjectPosition;
+	glm::vec3 m_SquareColor;
 };
 
 

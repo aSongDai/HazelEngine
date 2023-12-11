@@ -23,6 +23,8 @@
 
 #include "Hazel/Renderer/OrthogonalCamera.h"
 
+#include "Platform/OpenGL/OpenGLShader.h"
+
 // ----------Entry Pointer----------
 #include "Hazel/EntryPointer.h"
 // ---------------------------------
