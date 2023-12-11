@@ -25,7 +25,7 @@ public:
 	ExampleLayer()
 		:Layer("Example"), m_Camera(-1.6f, 1.6f, 0.9f, -0.9f), m_CameraMoveSpeed(1.0f),
 		m_CameraPosition(0.0f), m_CameraRotation(0.0f), m_cameraRotationSpeed(10.f),
-		m_ProjectPosition(glm::vec3(1.0f))
+		m_ProjectPosition(glm::vec3(1.0f)), m_SquareColor(glm::vec3(0.5f, 0.1f, 0.6f))
 	{
 		m_VertexArray.reset(Hazel::VertexArray::Create());
 
@@ -91,14 +91,14 @@ public:
 		{
 			{"a_Position", Hazel::BufferDataType::Float3}
 		};
-		std::shared_ptr<Hazel::VertexBuffer> m_SquareVertexBuffer;
+		Hazel::Ref<Hazel::VertexBuffer> m_SquareVertexBuffer;
 		m_SquareVertexBuffer.reset(Hazel::VertexBuffer::Create(square_vertices, sizeof(square_vertices)));
 		m_SquareVertexBuffer->SetBufferLayout(square_layout);
 		m_SquareVertexArray->AddVertexBuffer(m_SquareVertexBuffer);
 		uint32_t square_indices[] = {
 			0,1,2, 2,3,0
 		};
-		std::shared_ptr<Hazel::IndexBuffer> m_SquareIndexBuffer;
+		Hazel::Ref<Hazel::IndexBuffer> m_SquareIndexBuffer;
 		m_SquareIndexBuffer.reset(Hazel::IndexBuffer::Create(square_indices, sizeof(square_indices) / sizeof(uint32_t)));
 		m_SquareVertexArray->SetIndexBuffer(m_SquareIndexBuffer);
 
@@ -254,16 +254,16 @@ public:
 	}
 
 private:
-	std::shared_ptr<Hazel::VertexArray> m_VertexArray;
-	std::shared_ptr<Hazel::VertexBuffer> m_VertexBuffer;
-	std::shared_ptr<Hazel::IndexBuffer> m_IndexBuffer;
-	std::shared_ptr<Hazel::Shader> m_Shader;
-	std::shared_ptr<Hazel::VertexArray> m_SquareVertexArray;
-	std::shared_ptr<Hazel::Shader> m_SquareShader;
+	Hazel::Ref<Hazel::VertexArray> m_VertexArray;
+	Hazel::Ref<Hazel::VertexBuffer> m_VertexBuffer;
+	Hazel::Ref<Hazel::IndexBuffer> m_IndexBuffer;
+	Hazel::Ref<Hazel::Shader> m_Shader;
+	Hazel::Ref<Hazel::VertexArray> m_SquareVertexArray;
+	Hazel::Ref<Hazel::Shader> m_SquareShader;
 
 	// Test
-	std::shared_ptr<Hazel::Shader> m_RedColorShader;
-	std::shared_ptr<Hazel::Shader> m_BlueColorShader;
+	Hazel::Ref<Hazel::Shader> m_RedColorShader;
+	Hazel::Ref<Hazel::Shader> m_BlueColorShader;
 
 	Hazel::OrthogonalCamera m_Camera;
 	glm::vec3 m_CameraPosition;

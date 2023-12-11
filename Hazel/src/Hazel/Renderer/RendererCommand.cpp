@@ -15,7 +15,7 @@ namespace Hazel
 		s_RendererAPI->SetClearColor(color);
 	}
 
-	void RendererCommand::DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray)
+	void RendererCommand::DrawIndexed(const Ref<VertexArray>& vertexArray)
 	{
 		vertexArray->Bind();
 		s_RendererAPI->DrawElements(vertexArray);

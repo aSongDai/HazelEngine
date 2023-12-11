@@ -19,7 +19,7 @@ namespace Hazel
 		virtual void Clear() = 0;
 		virtual void SetClearColor(const glm::vec4&) = 0;
 
-		virtual void DrawElements(const std::shared_ptr<VertexArray>&) = 0;
+		virtual void DrawElements(const Ref<VertexArray>&) = 0;
 
 		inline static RenderEnum GetAPI() { return s_RendererAPI; }
 	private:

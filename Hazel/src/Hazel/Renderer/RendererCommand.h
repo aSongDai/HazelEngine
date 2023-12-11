@@ -15,7 +15,7 @@ namespace Hazel
 		static void Clear();
 		static void ClearColor(const glm::vec4&);
 
-		static void DrawIndexed(const std::shared_ptr<VertexArray>&);
+		static void DrawIndexed(const Ref<VertexArray>&);
 	private:
 		static RendererAPI* s_RendererAPI;
 	};

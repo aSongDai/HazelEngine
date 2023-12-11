@@ -1,6 +1,8 @@
 #pragma once
 
 
+#include <memory>
+
 #ifdef HAZEL_PLATFORM_WINDOWS
 
 #if HAZEL_DYNAMIC_LINK
@@ -37,3 +39,13 @@
 
 // bind the callback function
 #define HAZEL_BIND_EVENT_FUNCTION(function) std::bind(&function, this, std::placeholders::_1)
+
+
+namespace Hazel
+{
+	template<typename T>
+	using Scope = std::unique_ptr<T>;
+
+	template<typename T>
+	using Ref = std::shared_ptr<T>;
+}

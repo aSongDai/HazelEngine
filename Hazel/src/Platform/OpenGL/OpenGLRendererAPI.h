@@ -9,6 +9,6 @@ namespace Hazel
 	public:
 		virtual void Clear() override;
 		virtual void SetClearColor(const glm::vec4&) override;
-		virtual void DrawElements(const std::shared_ptr<VertexArray>&) override;
+		virtual void DrawElements(const Ref<VertexArray>&) override;
 	};
 }
