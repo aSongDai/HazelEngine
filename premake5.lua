@@ -15,15 +15,15 @@ workspace "HazelEngine"
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 IncludeDir = {}
-IncludeDir["GLFW"]	=	"Hazel/vendor/GLFW/include"
-IncludeDir["Glad"]	=	"Hazel/vendor/Glad/include"
-IncludeDir["ImGui"] =	"Hazel/vendor/imgui"
-IncludeDir["glm"]	=	"Hazel/vendor/glm"
+IncludeDir["GLFW"]		=			"Hazel/vendor/GLFW/include"
+IncludeDir["Glad"]		=			"Hazel/vendor/Glad/include"
+IncludeDir["ImGui"]		=			"Hazel/vendor/imgui"
+IncludeDir["glm"]		=			"Hazel/vendor/glm"
+IncludeDir["stb_image"] =			"Hazel/vendor/stb_image"
 
 include "Hazel/vendor/GLFW"
 include "Hazel/vendor/Glad"
 include "Hazel/vendor/imgui"
-
 
 project "Hazel"
 	
@@ -45,18 +45,20 @@ project "Hazel"
 		"%{prj.name}/src/**.cpp",
 		"%{prj.name}/src/**.hpp",
 		"%{IncludeDir.glm}/glm/*.hpp",
-		"%{IncludeDir.glm}/glm/*.inl"
+		"%{IncludeDir.glm}/glm/*.inl",
+		"%{IncludeDir.stb_image}/*.h",
+		"%{IncludeDir.stb_image}/*.cpp"
 	}
 	
 	includedirs
 	{
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
+		"%{prj.name}/vendor/stb_image",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
-		"%{IncludeDir.glm}",
-
+		"%{IncludeDir.glm}"
 	}
 
 	links{
@@ -110,7 +112,7 @@ project "Sandbox"
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
 		"%{IncludeDir.glm}/glm/*.hpp",
-		"%{IncludeDir.glm}/glm/*.inl"
+		"%{IncludeDir.glm}/glm/*.inl",
 	}
 
 	includedirs											-- include directory
