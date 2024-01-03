@@ -5,6 +5,11 @@ namespace Hazel
 {
 	RendererAPI* RendererCommand::s_RendererAPI = new OpenGLRendererAPI;
 
+	void RendererCommand::Init()
+	{
+		s_RendererAPI->Init();
+	}
+
 	void RendererCommand::Clear()
 	{
 		s_RendererAPI->Clear();

@@ -19,6 +19,8 @@ Hazel::Application::Application()
 	m_Window->SetEventCallback(BIND_EVENT_FUNCTION(OnEvent));
 	m_Window->SetVSync(false);
 
+	Renderer::Init();
+
 	m_ImGuiLayer = new ImGuiLayer();
 	PushOverlay(m_ImGuiLayer);
 

@@ -11,6 +11,7 @@ namespace Hazel
 	class HAZEL_API Renderer
 	{
 	public:
+		static void Init();
 		static void BeginScene(OrthogonalCamera& camera);
 		static void EndScene();
 

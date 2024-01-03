@@ -183,16 +183,16 @@ public:
 		const std::string textureVertexShaderRes = R"(
 			#version 330 core
 			layout (location=0) in vec3 a_Position;
-			layout (location=1) in vec2 a_Texture;
+			layout (location=1) in vec2 a_TexCoord;
 
 			uniform mat4 u_TransformMatrix;
 			uniform mat4 u_ViewProjectionMatrix;
 
-			out vec2 v_Texture;
+			out vec2 v_TexCoord;
 			
 			void main()
 			{
-				v_Texture = a_Texture;
+				v_TexCoord = a_TexCoord;
 				gl_Position = u_ViewProjectionMatrix * u_TransformMatrix * vec4(a_Position, 1.0);
 			}
 		)";
@@ -200,19 +200,20 @@ public:
 		const std::string textureFragmentShaderRes = R"(
 			#version 330 core
 			layout (location=0) out vec4 color;
-			in vec2 v_Texture;
+			in vec2 v_TexCoord;
 			
 			uniform sampler2D u_Texture;
 			void main()
 			{
-				color = texture(u_Texture, v_Texture);
+				color = texture(u_Texture, v_TexCoord);
+				// color = vec4(v_Texture, 0, 1);
 			}
 		)";
 		m_TextureShader.reset(Hazel::Shader::Create(textureVertexShaderRes, textureFragmentShaderRes));
-
-		m_Texture = (Hazel::Texture2D::Create("src/assert/textures/Checkerboard.png"));
-		//m_Texture = Hazel::Texture2D::Create("assert/Texture/Checkerboard.png");
-
+		
+		m_Texture = (Hazel::Texture2D::Create("src/asserts/textures/Checkerboard.png"));
+		//m_LogoTexture = Hazel::Texture2D::Create("src/asserts/textures/test.png");
+		m_LogoTexture = Hazel::Texture2D::Create("src/asserts/textures/ChernoLogo.png");
 		//// upload texture
 		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_TextureShader)->Bind();
 		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
@@ -276,9 +277,10 @@ public:
 		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_SquareShader)->UploadUniformFloat3("u_Color", m_SquareColor);
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_ProjectPosition);
 		Hazel::Renderer::Submit(m_SquareVertexArray, m_TextureShader, transform);
-		
-		//Hazel::Renderer::Submit(m_VertexArray, m_Shader);
-		// Write a Texture Shader
+
+		// logo texture
+		m_LogoTexture->Bind();
+		Hazel::Renderer::Submit(m_SquareVertexArray, m_TextureShader, transform);
 		
 
 		Hazel::Renderer::EndScene();
@@ -312,7 +314,7 @@ private:
 	Hazel::Ref<Hazel::Shader> m_BlueColorShader;
 	Hazel::Ref<Hazel::Shader> m_TextureShader;
 
-	Hazel::Ref<Hazel::Texture2D> m_Texture;
+	Hazel::Ref<Hazel::Texture2D> m_Texture, m_LogoTexture;
 	
 
 	Hazel::OrthogonalCamera m_Camera;
