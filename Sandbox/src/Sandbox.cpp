@@ -179,37 +179,10 @@ public:
 		)";
 		m_BlueColorShader.reset(Hazel::Shader::Create(blueVertexShaderSrc, blueFragmentShaderSrc));
 
-		// Texture Shader
-		const std::string textureVertexShaderRes = R"(
-			#version 330 core
-			layout (location=0) in vec3 a_Position;
-			layout (location=1) in vec2 a_TexCoord;
 
-			uniform mat4 u_TransformMatrix;
-			uniform mat4 u_ViewProjectionMatrix;
+		m_TextureShader.reset(Hazel::Shader::Create("src/asserts/shaders/Texture.glsl"));
 
-			out vec2 v_TexCoord;
-			
-			void main()
-			{
-				v_TexCoord = a_TexCoord;
-				gl_Position = u_ViewProjectionMatrix * u_TransformMatrix * vec4(a_Position, 1.0);
-			}
-		)";
-
-		const std::string textureFragmentShaderRes = R"(
-			#version 330 core
-			layout (location=0) out vec4 color;
-			in vec2 v_TexCoord;
-			
-			uniform sampler2D u_Texture;
-			void main()
-			{
-				color = texture(u_Texture, v_TexCoord);
-				// color = vec4(v_Texture, 0, 1);
-			}
-		)";
-		m_TextureShader.reset(Hazel::Shader::Create(textureVertexShaderRes, textureFragmentShaderRes));
+		//m_TextureShader.reset(Hazel::Shader::Create(textureVertexShaderRes, textureFragmentShaderRes));
 		
 		m_Texture = (Hazel::Texture2D::Create("src/asserts/textures/Checkerboard.png"));
 		//m_LogoTexture = Hazel::Texture2D::Create("src/asserts/textures/test.png");

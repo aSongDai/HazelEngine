@@ -5,94 +5,171 @@
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <iostream>
 #include <vector>
+#include <fstream>
 
 namespace Hazel
 {
+	static GLenum GLTypeFromString(const std::string& type)
+	{
+		if (type == "vertex")
+		{
+			return GL_VERTEX_SHADER;
+		}
+		else if (type == "fragment")
+		{
+			return GL_FRAGMENT_SHADER;
+		}
+		HAZEL_CORE_ASSERT(false, "Unknown Shader type!");
+	}
+
+	/*
+		Constructor: 
+			Using a filepath to initialize Shader.
+
+		Args:
+			Path of shader file.
+	*/
+	OpenGLShader::OpenGLShader(const std::string& filepath)
+	{
+		std::string shaderSource = ReadFile(filepath);
+		const auto shaderSources = SplitShaderSource(shaderSource);
+		const auto shaderIDs = CompileShader(shaderSources);
+		LinkShaderProgram(shaderIDs);
+	}
+
+
+	/*
+		Constructor:
+			Using two strings, which are the sources of shaders.
+	*/
 	OpenGLShader::OpenGLShader(const std::string& vertexShaderSource, const std::string& fragmentShaderSource)
 	{
-		// 有 vertexShader 源码， 编译并查看日志
-		uint32_t vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
-		const char* vertexShaderRes = vertexShaderSource.c_str();
-		glShaderSource(vertexShaderID, 1, &vertexShaderRes, 0);
-		glCompileShader(vertexShaderID);
-
-		int vertexShaderCompileStatus = 0;
-		glGetShaderiv(vertexShaderID, GL_COMPILE_STATUS, &vertexShaderCompileStatus);
-		if (vertexShaderCompileStatus == GL_FALSE)
-		{
-			// Compile failed
-			int lengthInf = 0;
-			glGetShaderiv(vertexShaderID, GL_INFO_LOG_LENGTH, &lengthInf);
-
-			std::vector<char> infoLog(lengthInf);
-			glGetShaderInfoLog(vertexShaderID, sizeof(infoLog), &lengthInf, &infoLog[0]);
-
-			// 获取玩编译信息之后， 就可以把编译失败的着色器删除掉
-			glDeleteShader(vertexShaderID);
-
-			// show message of compiling
-			HAZEL_CORE_ERROR("VertexShader Compiled Failed: ");
-			HAZEL_CORE_ERROR(" {0}", infoLog.data());
-
-			return;
-		}
-		
-
-		// 有 fragmentShader 源码， 编译并查看日志
-		uint32_t fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
-		const char* fragmentShaderRes = fragmentShaderSource.c_str();
-		glShaderSource(fragmentShaderID, 1, &fragmentShaderRes, 0);
-		glCompileShader(fragmentShaderID);
-		int fragmentShaderCompileStatus = 0;
-		glGetShaderiv(fragmentShaderID, GL_COMPILE_STATUS, &fragmentShaderCompileStatus);
-		if (fragmentShaderCompileStatus == GL_FALSE)
-		{
-			// compile failed
-			int lengthInf = 0;
-			glGetShaderiv(fragmentShaderID, GL_INFO_LOG_LENGTH, &lengthInf);
-
-			std::vector<char> infoLog(lengthInf);
-			glGetShaderInfoLog(fragmentShaderID, sizeof(infoLog), &lengthInf, &infoLog[0]);
-
-			glDeleteShader(fragmentShaderID);
-
-			HAZEL_CORE_ERROR("Fragment Shader Compile Failed: ");
-			HAZEL_CORE_ERROR(" {0}", infoLog.data());
-
-			return;
-		}
-
-		// 创建 shaderProgram 并添加 vertexShader 和 fragmentShader
-		m_ShaderProgramID = glCreateProgram();
-		glAttachShader(m_ShaderProgramID, vertexShaderID);
-		glAttachShader(m_ShaderProgramID, fragmentShaderID);
-		
-		// check link status
-		glLinkProgram(m_ShaderProgramID);
-		GLint shaderProgramLinkStatus = 0;
-		glGetProgramiv(m_ShaderProgramID, GL_LINK_STATUS, &shaderProgramLinkStatus);
-		if (shaderProgramLinkStatus == GL_FALSE)
-		{
-			// link failed 
-			GLint lengthInf = 0;
-			glGetProgramiv(m_ShaderProgramID, GL_INFO_LOG_LENGTH, &lengthInf);
-
-			std::vector<char> infoLog(lengthInf);
-			glGetProgramInfoLog(m_ShaderProgramID, sizeof(infoLog), &lengthInf, &infoLog[0]);
-
-			HAZEL_CORE_ERROR("Shader Program Link Failed: ");
-			HAZEL_CORE_ERROR(" {0}", infoLog.data());
-			return;
-		}
-		glDetachShader(m_ShaderProgramID, vertexShaderID);
-		glDetachShader(m_ShaderProgramID, fragmentShaderID);
+		std::unordered_map<GLenum, std::string> shaderSources;
+		shaderSources[GLTypeFromString("vertex")] = vertexShaderSource;
+		shaderSources[GLTypeFromString("fragment")] = fragmentShaderSource;
+		const auto& shaderIDs = CompileShader(shaderSources);
+		LinkShaderProgram(shaderIDs);
 	}
 
 	OpenGLShader::~OpenGLShader()
 	{
 		glDeleteProgram(m_ShaderProgramID);
 	}
+
+	std::string OpenGLShader::ReadFile(const std::string& filepath)
+	{
+		std::string shaderSource;
+		std::ifstream fin(filepath, std::ios::in, std::ios::binary);
+
+		if (!fin.is_open())
+		{
+			std::cerr << "Unable to open shader file!\n" << std::endl;
+			HAZEL_CORE_ASSERT(false, "Unable to open shader file, please check you file!");
+		}
+
+		// read file 
+		fin.seekg(0, std::ios::end);
+		shaderSource.resize(fin.tellg());
+		fin.seekg(0, std::ios::beg);
+		fin.read(&shaderSource[0], shaderSource.size());
+		fin.close();															// close file stream.
+
+		return shaderSource;
+		
+	}
+
+
+
+	std::vector<GLint> const OpenGLShader::CompileShader(const std::unordered_map<GLenum, std::string>& shaderSources)		// 感觉可以让它返回一个 unordered_map<uint32_t>, 存放 vertexShaderID 和 fragmentShaderID, 完事儿改造一下这里
+	{
+		std::vector<GLint> shaderIDs;
+		for (const auto& [shaderType, shaderSource] : shaderSources)
+		{
+			GLint shaderID = glCreateShader(shaderType);
+			const char* source = shaderSource.c_str();
+			glShaderSource(shaderID, 1, &source, 0);
+			glCompileShader(shaderID);
+
+			int status = 0;
+			glGetShaderiv(shaderID, GL_COMPILE_STATUS, &status);
+			if (status == GL_FALSE)
+			{
+				GLint errorLength = 0;
+				glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &errorLength);
+
+				std::vector<char> info(errorLength);
+				glGetShaderInfoLog(shaderID, info.size(), &errorLength, &info[0]);
+
+				glDeleteShader(shaderID);
+
+				HAZEL_CORE_ERROR(info.data());
+				HAZEL_CORE_ASSERT(false, "Shader compilation failure!");
+				return shaderIDs;
+			}
+
+			// 编译完事儿之后需要挂载到程序上
+			shaderIDs.push_back(shaderID);
+		}
+		return shaderIDs;
+	}
+
+	const std::unordered_map<GLenum, std::string> OpenGLShader::SplitShaderSource(const std::string& shaderSource)
+	{
+		std::unordered_map<GLenum, std::string> shaders;
+		
+		// split  --  Cherno
+		const char* typeToken = "#type";
+		size_t typeTokenLength = strlen(typeToken);
+		size_t pos = shaderSource.find(typeToken, 0);
+		while (pos != std::string::npos)
+		{
+			size_t eol = shaderSource.find_first_of("\r\n", pos);				// find #type shaderType
+			HAZEL_CORE_ASSERT(eol != std::string::npos, "Unknown shader type!");
+			size_t shaderTypeBegin = pos + typeTokenLength + 1;
+			std::string type = shaderSource.substr(shaderTypeBegin, eol - shaderTypeBegin);
+			HAZEL_CORE_ASSERT(type == "vertex" || type == "fragment" || type == "pixel", "Invalid shader type specified!");
+
+			size_t nextLinePos = shaderSource.find_first_not_of("\r\n", eol);
+			pos = shaderSource.find(typeToken, nextLinePos);
+			shaders[GLTypeFromString(type)] = shaderSource.substr(nextLinePos, pos - (nextLinePos == std::string::npos ? shaderSource.size() - 1 : nextLinePos));
+		}
+		return shaders;
+	}
+
+	void OpenGLShader::LinkShaderProgram(const std::vector<GLint>& shaderIDs)
+	{
+		m_ShaderProgramID = glCreateProgram();
+
+		for (const auto id : shaderIDs)
+		{
+			glAttachShader(m_ShaderProgramID, id);
+		}
+		glLinkProgram(m_ShaderProgramID);
+		int status = 0;
+		glGetProgramiv(m_ShaderProgramID, GL_LINK_STATUS, &status);
+		if (status == GL_FALSE)
+		{
+			GLint infoLength = 0;
+			glGetProgramiv(m_ShaderProgramID, GL_INFO_LOG_LENGTH, &infoLength);
+			
+			std::vector<char> infoLog(infoLength);
+			glGetProgramInfoLog(m_ShaderProgramID, infoLog.size(), &infoLength, &infoLog[0]);
+
+			HAZEL_CORE_ERROR("Some error on Shader Program Linking!");
+			HAZEL_CORE_ASSERT(false, "Linking Error!");
+			return;
+		}
+
+		for (const auto id : shaderIDs)
+		{
+			glAttachShader(m_ShaderProgramID, id);
+			glDeleteShader(id);
+		}
+	}
+
+
 
 	void OpenGLShader::Bind() const
 	{

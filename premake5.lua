@@ -111,8 +111,6 @@ project "Sandbox"
 	{
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
-		"%{IncludeDir.glm}/glm/*.hpp",
-		"%{IncludeDir.glm}/glm/*.inl",
 	}
 
 	includedirs											-- include directory
