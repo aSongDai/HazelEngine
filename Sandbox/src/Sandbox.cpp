@@ -76,7 +76,7 @@ public:
 			}
 		)";
 		// Shader
-		m_Shader.reset(Hazel::Shader::Create(vertexShaderResource, fragmentShaderResource));
+		m_Shader = Hazel::Shader::Create("positionColorShader",vertexShaderResource, fragmentShaderResource);
 
 		// Square Render
 		m_SquareVertexArray.reset(Hazel::VertexArray::Create());
@@ -126,7 +126,7 @@ public:
 			} 
 		)";
 
-		m_SquareShader.reset(Hazel::Shader::Create(squareVertexShaderSrc, squareFragmentShaderSrc));
+		m_SquareShader = Hazel::Shader::Create("squareShader", squareVertexShaderSrc, squareFragmentShaderSrc);
 
 
 		// redColorShader
@@ -149,7 +149,7 @@ public:
 				color = vec4(0.8f, 0.2f, 0.3f, 1.0f);
 			} 
 		)";
-		m_RedColorShader.reset(Hazel::Shader::Create(redVertexShaderSrc, redFragmentShaderSrc));
+		m_RedColorShader = (Hazel::Shader::Create("redShader", redVertexShaderSrc, redFragmentShaderSrc));
 
 		// blueColorShader
 		std::string blueVertexShaderSrc = R"(
@@ -177,10 +177,10 @@ public:
 				color = vec4(v_TexCoord, 0.0f, 1.0f);
 			} 
 		)";
-		m_BlueColorShader.reset(Hazel::Shader::Create(blueVertexShaderSrc, blueFragmentShaderSrc));
+		m_BlueColorShader = (Hazel::Shader::Create("blueShader", blueVertexShaderSrc, blueFragmentShaderSrc));
 
 
-		m_TextureShader.reset(Hazel::Shader::Create("src/asserts/shaders/Texture.glsl"));
+		auto textureShader = m_ShaderLibrary.LoadShader("src/asserts/shaders/Texture.glsl");
 
 		//m_TextureShader.reset(Hazel::Shader::Create(textureVertexShaderRes, textureFragmentShaderRes));
 		
@@ -188,8 +188,8 @@ public:
 		//m_LogoTexture = Hazel::Texture2D::Create("src/asserts/textures/test.png");
 		m_LogoTexture = Hazel::Texture2D::Create("src/asserts/textures/ChernoLogo.png");
 		//// upload texture
-		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_TextureShader)->Bind();
-		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(textureShader)->Bind();
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
 	}
 
 	virtual void OnUpdate(Hazel::TimeStep& deltaTime) override
@@ -249,11 +249,11 @@ public:
 		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_SquareShader)->Bind();
 		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_SquareShader)->UploadUniformFloat3("u_Color", m_SquareColor);
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_ProjectPosition);
-		Hazel::Renderer::Submit(m_SquareVertexArray, m_TextureShader, transform);
+		Hazel::Renderer::Submit(m_SquareVertexArray, m_ShaderLibrary.GetShader("Texture"), transform);
 
 		// logo texture
 		m_LogoTexture->Bind();
-		Hazel::Renderer::Submit(m_SquareVertexArray, m_TextureShader, transform);
+		Hazel::Renderer::Submit(m_SquareVertexArray, m_ShaderLibrary.GetShader("Texture"), transform);
 		
 
 		Hazel::Renderer::EndScene();
@@ -285,9 +285,11 @@ private:
 	// Test
 	Hazel::Ref<Hazel::Shader> m_RedColorShader;
 	Hazel::Ref<Hazel::Shader> m_BlueColorShader;
-	Hazel::Ref<Hazel::Shader> m_TextureShader;
+	//Hazel::Ref<Hazel::Shader> m_TextureShader;
 
 	Hazel::Ref<Hazel::Texture2D> m_Texture, m_LogoTexture;
+
+	Hazel::ShaderLibrary m_ShaderLibrary;
 	
 
 	Hazel::OrthogonalCamera m_Camera;

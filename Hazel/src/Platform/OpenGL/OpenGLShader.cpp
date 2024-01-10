@@ -37,6 +37,13 @@ namespace Hazel
 		const auto shaderSources = SplitShaderSource(shaderSource);
 		const auto shaderIDs = CompileShader(shaderSources);
 		LinkShaderProgram(shaderIDs);
+
+		// set m_Name.			asserts/shaders/Texture.glsl	lastslash 15 lastdot 23
+		auto lastSlash = filepath.find_last_of("/\\");
+		auto beginName = lastSlash == std::string::npos ? 0 : lastSlash + 1;
+		auto lastDot = filepath.find_last_of('.');
+		auto lengthName = lastDot == std::string::npos ? filepath.size() - beginName : lastDot - beginName;
+		m_Name = filepath.substr(beginName, lengthName);
 	}
 
 
@@ -44,7 +51,8 @@ namespace Hazel
 		Constructor:
 			Using two strings, which are the sources of shaders.
 	*/
-	OpenGLShader::OpenGLShader(const std::string& vertexShaderSource, const std::string& fragmentShaderSource)
+	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexShaderSource, const std::string& fragmentShaderSource)
+		:m_Name (name)
 	{
 		std::unordered_map<GLenum, std::string> shaderSources;
 		shaderSources[GLTypeFromString("vertex")] = vertexShaderSource;
@@ -61,7 +69,7 @@ namespace Hazel
 	std::string OpenGLShader::ReadFile(const std::string& filepath)
 	{
 		std::string shaderSource;
-		std::ifstream fin(filepath, std::ios::in, std::ios::binary);
+		std::ifstream fin(filepath, std::ios::in | std::ios::binary);
 
 		if (!fin.is_open())
 		{
@@ -84,7 +92,7 @@ namespace Hazel
 
 	std::vector<GLint> const OpenGLShader::CompileShader(const std::unordered_map<GLenum, std::string>& shaderSources)		// 感觉可以让它返回一个 unordered_map<uint32_t>, 存放 vertexShaderID 和 fragmentShaderID, 完事儿改造一下这里
 	{
-		std::vector<GLint> shaderIDs;
+		std::vector<GLint> shaderIDs;											// 可以在栈上优化这点内存
 		for (const auto& [shaderType, shaderSource] : shaderSources)
 		{
 			GLint shaderID = glCreateShader(shaderType);

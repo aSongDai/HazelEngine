@@ -12,11 +12,13 @@ namespace Hazel
 	{
 	public:
 		OpenGLShader(const std::string& filepath);
-		OpenGLShader(const std::string& vertexShaderSource, const std::string& fragmentShaderSource);
+		OpenGLShader(const std::string& name, const std::string& vertexShaderSource, const std::string& fragmentShaderSource);
 		virtual ~OpenGLShader();
 
 		virtual void Bind() const override;
 		virtual void UnBind() const override;
+
+		virtual const std::string& GetName() const override { return m_Name; }
 
 		void UploadUniformMatrix4(const std::string&, const glm::mat4&) const;
 
@@ -32,9 +34,10 @@ namespace Hazel
 		std::string ReadFile(const std::string& filepath);
 		std::unordered_map<GLenum, std::string> const SplitShaderSource(const std::string&);
 		std::vector<GLint> const CompileShader(const std::unordered_map<GLenum, std::string>& shaderSources);
-		void LinkShaderProgram(const std::vector<GLint>&);
+		void LinkShaderProgram(const std::vector<GLint>& shaderIDs);
 
 	private:
 		int m_ShaderProgramID;
+		std::string m_Name;
 	};
 }
