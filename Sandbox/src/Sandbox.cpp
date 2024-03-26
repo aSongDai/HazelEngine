@@ -23,8 +23,7 @@ class ExampleLayer :public Hazel::Layer
 {
 public:
 	ExampleLayer()
-		:Layer("Example"), m_Camera(-1.6f, 1.6f, 0.9f, -0.9f), m_CameraMoveSpeed(1.0f),
-		m_CameraPosition(0.0f), m_CameraRotation(0.0f), m_cameraRotationSpeed(10.f),
+		:Layer("Example"), m_CameraController(1.6f / 0.9f, true),
 		m_ProjectPosition(glm::vec3(0.f)), m_SquareColor(glm::vec3(0.5f, 0.1f, 0.6f))
 	{
 		m_VertexArray.reset(Hazel::VertexArray::Create());
@@ -194,56 +193,14 @@ public:
 
 	virtual void OnUpdate(Hazel::TimeStep& deltaTime) override
 	{
-		//HAZEL_CLIENT_TRACE("TimeStep: {0}s \t {1}ms", deltaTime.GetTime(), deltaTime.GetMilliSecond());
-		if (Hazel::Input::IsKeyPressed(HAZEL_KEY_A))
-		{
-			m_CameraPosition.x -= m_CameraMoveSpeed * deltaTime;
-		}
-		if (Hazel::Input::IsKeyPressed(HAZEL_KEY_D))
-		{
-			m_CameraPosition.x += m_CameraMoveSpeed * deltaTime;
-		}
-		if (Hazel::Input::IsKeyPressed(HAZEL_KEY_S))
-		{
-			m_CameraPosition.y -= m_CameraMoveSpeed * deltaTime;
-		}
-		if (Hazel::Input::IsKeyPressed(HAZEL_KEY_W))
-		{
-			m_CameraPosition.y += m_CameraMoveSpeed * deltaTime;
-		}
-		if (Hazel::Input::IsKeyPressed(HAZEL_KEY_LEFT))
-		{
-			m_CameraRotation -= m_cameraRotationSpeed * deltaTime;
-		}
-		if (Hazel::Input::IsKeyPressed(HAZEL_KEY_RIGHT))
-		{
-			m_CameraRotation += m_cameraRotationSpeed * deltaTime;
-		}
+		// Update camera.
+		m_CameraController.OnUpdate(deltaTime);
 
-		if (Hazel::Input::IsKeyPressed(HAZEL_KEY_J))
-		{
-			m_ProjectPosition.x -= m_CameraMoveSpeed * deltaTime;
-		}
-		if (Hazel::Input::IsKeyPressed(HAZEL_KEY_L))
-		{
-			m_ProjectPosition.x += m_CameraMoveSpeed * deltaTime;
-		}
-		if (Hazel::Input::IsKeyPressed(HAZEL_KEY_K))
-		{
-			m_ProjectPosition.y -= m_CameraMoveSpeed * deltaTime;
-		}
-		if (Hazel::Input::IsKeyPressed(HAZEL_KEY_I))
-		{
-			m_ProjectPosition.y += m_CameraMoveSpeed * deltaTime;
-		}
-
-
+		// Renderer 
 		Hazel::RendererCommand::Clear();
 		Hazel::RendererCommand::ClearColor({ 0.45f, 0.55f, 0.60f, 1.00f });
 
-		m_Camera.SetPosition(m_CameraPosition);
-		m_Camera.SetRotation(m_CameraRotation);
-		Hazel::Renderer::BeginScene(m_Camera);
+		Hazel::Renderer::BeginScene(m_CameraController.GetCamera());
 
 		m_Texture->Bind();
 		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_SquareShader)->Bind();
@@ -272,6 +229,7 @@ public:
 
 	virtual void OnEvent(Hazel::Event& event) override
 	{
+		m_CameraController.OnEvent(event);
 	}
 
 private:
@@ -292,11 +250,8 @@ private:
 	Hazel::ShaderLibrary m_ShaderLibrary;
 	
 
-	Hazel::OrthogonalCamera m_Camera;
-	glm::vec3 m_CameraPosition;
-	float m_CameraRotation;
-	float m_cameraRotationSpeed;
-	float m_CameraMoveSpeed;
+	// Hazel::OrthographicCamera m_Camera;
+	Hazel::OrthographicCameraController m_CameraController;
 
 	glm::vec3 m_ProjectPosition;
 	glm::vec3 m_SquareColor;

@@ -172,9 +172,10 @@
     <ClInclude Include="src\Hazel\KeyCode.h" />
     <ClInclude Include="src\Hazel\Layer.h" />
     <ClInclude Include="src\Hazel\LayerStack.h" />
+    <ClInclude Include="src\Hazel\OrthoCameraController.h" />
     <ClInclude Include="src\Hazel\Renderer\Buffer.h" />
     <ClInclude Include="src\Hazel\Renderer\GraphicContext.h" />
-    <ClInclude Include="src\Hazel\Renderer\OrthogonalCamera.h" />
+    <ClInclude Include="src\Hazel\Renderer\OrthographicCamera.h" />
     <ClInclude Include="src\Hazel\Renderer\RenderAPI.h" />
     <ClInclude Include="src\Hazel\Renderer\Renderer.h" />
     <ClInclude Include="src\Hazel\Renderer\RendererCommand.h" />
@@ -223,8 +224,9 @@
     <ClCompile Include="src\Hazel\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\Hazel\Layer.cpp" />
     <ClCompile Include="src\Hazel\LayerStack.cpp" />
+    <ClCompile Include="src\Hazel\OrthoCameraController.cpp" />
     <ClCompile Include="src\Hazel\Renderer\Buffer.cpp" />
-    <ClCompile Include="src\Hazel\Renderer\OrthogonalCamera.cpp" />
+    <ClCompile Include="src\Hazel\Renderer\OrthographicCamera.cpp" />
     <ClCompile Include="src\Hazel\Renderer\RenderAPI.cpp" />
     <ClCompile Include="src\Hazel\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Hazel\Renderer\RendererCommand.cpp" />

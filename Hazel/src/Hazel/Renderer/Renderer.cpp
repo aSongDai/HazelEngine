@@ -12,7 +12,7 @@ namespace Hazel
 		RendererCommand::Init();
 	}
 
-	void Renderer::BeginScene(OrthogonalCamera& camera)
+	void Renderer::BeginScene(OrthographicCamera& camera)
 	{
 		// TODO:	
 		// 设置相机、灯光、环境等等
