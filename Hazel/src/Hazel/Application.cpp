@@ -16,7 +16,7 @@ Hazel::Application::Application()
 	HAZEL_CORE_ASSERT(!m_Instance, "Application already exists!");
 	m_Instance = this;
 	m_Window =std::unique_ptr<Window>(Window::Create());
-	m_Window->SetEventCallback(BIND_EVENT_FUNCTION(OnEvent));
+	m_Window->SetEventCallback(HAZEL_BIND_EVENT_FUNCTION(Hazel::Application::OnEvent));
 	m_Window->SetVSync(false);
 
 	Renderer::Init();
@@ -29,7 +29,8 @@ Hazel::Application::Application()
 void Hazel::Application::OnEvent(Event& e)
 {
 	EventDispatcher dispatcher(e);
-	dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FUNCTION(OnWindowClose));
+	dispatcher.Dispatch<WindowCloseEvent>(HAZEL_BIND_EVENT_FUNCTION(Hazel::Application::OnWindowClose));
+	dispatcher.Dispatch<WindowResizeEvent>(HAZEL_BIND_EVENT_FUNCTION(Hazel::Application::OnWindowResize));
 
 	//HAZEL_CORE_TRACE("{0}", e);s
 
@@ -54,11 +55,13 @@ void Hazel::Application::Run()
 		TimeStep timeStep(time - m_LastFrameTime);
 		m_LastFrameTime = time;
 		
-
-		for (auto layer : m_LayerStack)
-		{
-			layer->OnUpdate(timeStep);
+		if (!m_Minimize) {
+			for (auto layer : m_LayerStack)
+			{
+				layer->OnUpdate(timeStep);
+			}
 		}
+
 		m_ImGuiLayer->Begin();
 		for (auto layer : m_LayerStack)
 			layer->OnImGuiRender();
@@ -73,6 +76,22 @@ bool Hazel::Application::OnWindowClose(Hazel::WindowCloseEvent& event)
 {
 	m_Running = false;
 	return true;
+}
+
+bool Hazel::Application::OnWindowResize(Hazel::WindowResizeEvent& event)
+{
+
+	if (event.GetWidth() == 0 || event.GetHeight() == 0)
+	{
+		m_Minimize = true;
+		return false;
+	}
+
+	m_Minimize = false;
+
+	Renderer::OnWindowResize(event.GetWidth(), event.GetHeight());
+
+	return false;
 }
 
 

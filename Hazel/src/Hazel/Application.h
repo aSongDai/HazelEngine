@@ -14,13 +14,11 @@
 
 #include "Hazel/Core/TimeStep.h"
 
-
 #include <memory>
-
 
 namespace Hazel
 {
-#define BIND_EVENT_FUNCTION(x) std::bind(&Hazel::Application::x, this, std::placeholders::_1)
+//#define BIND_EVENT_FUNCTION(x) std::bind(&Hazel::Application::x, this, std::placeholders::_1)
 
 
 	class HAZEL_API Application
@@ -41,10 +39,12 @@ namespace Hazel
 		inline static Application& Get() { return *m_Instance; }
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
+		bool OnWindowResize(WindowResizeEvent& e);
 	private:
 		std::unique_ptr<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
+		bool m_Minimize = false;
 		LayerStack m_LayerStack;
 		float m_LastFrameTime;
 

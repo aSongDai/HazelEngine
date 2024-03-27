@@ -13,8 +13,9 @@ namespace Hazel
 	{
 	public:
 		// 这里的几个函数都可以写成内联函数
-
 		static void Init();
+		static void SetViewPort(uint32_t, uint32_t, uint32_t, uint32_t);
+
 		static void Clear();
 		static void ClearColor(const glm::vec4&);
 

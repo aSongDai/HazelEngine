@@ -18,6 +18,7 @@ namespace Hazel
 	public:
 		virtual void Init() = 0;
 		virtual void Clear() = 0;
+		virtual void SetViewPort(uint32_t, uint32_t, uint32_t, uint32_t) = 0;
 		virtual void SetClearColor(const glm::vec4&) = 0;
 
 		virtual void DrawElements(const Ref<VertexArray>&) = 0;

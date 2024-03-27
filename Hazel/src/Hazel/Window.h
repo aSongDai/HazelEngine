@@ -9,6 +9,7 @@
 
 namespace Hazel
 {
+	using EventCallbackFunction = std::function<void(Event&)>;
 
 	struct WindowProps
 	{
@@ -28,7 +29,6 @@ namespace Hazel
 	class HAZEL_API Window
 	{
 	public:
-		using EventCallbackFunction = std::function<void(Event&)>;
 
 		virtual ~Window() = default;
 

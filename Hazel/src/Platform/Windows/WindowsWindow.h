@@ -11,6 +11,15 @@
 namespace Hazel
 {
 
+	struct WindowData
+	{
+		std::string				Title;
+		unsigned int			Width, Height;
+		bool					VSync;
+
+		EventCallbackFunction	EventCallback;
+	};
+
 	class HAZEL_API WindowsWindow :public Window
 	{
 	public:
@@ -37,15 +46,9 @@ namespace Hazel
 
 	private:
 		GLFWwindow* m_Window;
-
-		struct WindowData
-		{
-			std::string				Title;
-			unsigned int			Width, Height;
-			bool					VSync;
-
-			EventCallbackFunction	EventCallback;
-		};
 		WindowData m_Data;
+
 	};
+
+	
 }

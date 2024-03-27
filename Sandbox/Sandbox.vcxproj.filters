@@ -18,79 +18,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Hazel\vendor\glm\glm\common.hpp">
-      <Filter>Hazel\vendor\glm\glm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Hazel\vendor\glm\glm\exponential.hpp">
-      <Filter>Hazel\vendor\glm\glm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Hazel\vendor\glm\glm\ext.hpp">
-      <Filter>Hazel\vendor\glm\glm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Hazel\vendor\glm\glm\fwd.hpp">
-      <Filter>Hazel\vendor\glm\glm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Hazel\vendor\glm\glm\geometric.hpp">
-      <Filter>Hazel\vendor\glm\glm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Hazel\vendor\glm\glm\glm.hpp">
-      <Filter>Hazel\vendor\glm\glm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Hazel\vendor\glm\glm\integer.hpp">
-      <Filter>Hazel\vendor\glm\glm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Hazel\vendor\glm\glm\mat2x2.hpp">
-      <Filter>Hazel\vendor\glm\glm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Hazel\vendor\glm\glm\mat2x3.hpp">
-      <Filter>Hazel\vendor\glm\glm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Hazel\vendor\glm\glm\mat2x4.hpp">
-      <Filter>Hazel\vendor\glm\glm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Hazel\vendor\glm\glm\mat3x2.hpp">
-      <Filter>Hazel\vendor\glm\glm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Hazel\vendor\glm\glm\mat3x3.hpp">
-      <Filter>Hazel\vendor\glm\glm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Hazel\vendor\glm\glm\mat3x4.hpp">
-      <Filter>Hazel\vendor\glm\glm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Hazel\vendor\glm\glm\mat4x2.hpp">
-      <Filter>Hazel\vendor\glm\glm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Hazel\vendor\glm\glm\mat4x3.hpp">
-      <Filter>Hazel\vendor\glm\glm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Hazel\vendor\glm\glm\mat4x4.hpp">
-      <Filter>Hazel\vendor\glm\glm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Hazel\vendor\glm\glm\matrix.hpp">
-      <Filter>Hazel\vendor\glm\glm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Hazel\vendor\glm\glm\packing.hpp">
-      <Filter>Hazel\vendor\glm\glm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Hazel\vendor\glm\glm\trigonometric.hpp">
-      <Filter>Hazel\vendor\glm\glm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Hazel\vendor\glm\glm\vec2.hpp">
-      <Filter>Hazel\vendor\glm\glm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Hazel\vendor\glm\glm\vec3.hpp">
-      <Filter>Hazel\vendor\glm\glm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Hazel\vendor\glm\glm\vec4.hpp">
-      <Filter>Hazel\vendor\glm\glm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Hazel\vendor\glm\glm\vector_relational.hpp">
-      <Filter>Hazel\vendor\glm\glm</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="src\Sandbox.cpp">
       <Filter>src</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\asserts\shaders\Texture.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="src\DevLog.txt">
+      <Filter>src</Filter>
+    </Text>
   </ItemGroup>
 </Project>
